@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>V.I.S.O.R. | ?¨ç³»çµ±é??¼æ·±åº¦å??ç™½?®æ›¸</title>
+    
+    <!-- ?¸å?è³‡æ? (CDN) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;500&family=Orbitron:wght@400;700&family=Noto+Sans+TC:wght@300;500;900&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --neon-cyan: #22d3ee;
+            --neon-blue: #3b82f6;
+            --neon-purple: #a855f7;
+            --bg-dark: #020617;
+            --card-dark: #0f172a;
+        }
+        body {
+            background-color: var(--bg-dark);
+            color: #f1f5f9;
+            font-family: 'Noto Sans TC', "Microsoft JhengHei", sans-serif;
+            scroll-behavior: smooth;
+        }
+        .font-orbitron { font-family: 'Orbitron', sans-serif; }
+        .font-mono { font-family: 'Fira Code', monospace; }
+        
+        .glass-card {
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(34, 211, 238, 0.1);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .glass-card:hover {
+            border-color: rgba(34, 211, 238, 0.4);
+            box-shadow: 0 0 40px rgba(34, 211, 238, 0.15);
+            transform: translateY(-4px);
+        }
+        
+        .neon-glow { text-shadow: 0 0 15px rgba(34, 211, 238, 0.6); }
+
+        pre {
+            background: #000 !important;
+            border-radius: 12px;
+            padding: 1.5rem;
+            font-size: 0.75rem;
+            border: 1px solid #1e293b;
+            color: #22d3ee;
+            overflow-x: auto;
+            line-height: 1.6;
+        }
+        .code-kw { color: #f472b6; }
+        .code-fn { color: #fbbf24; }
+        .code-cmt { color: #64748b; font-style: italic; }
+
+        /* Timeline */
+        .timeline-line { position: absolute; left: 20px; top: 0; bottom: 0; width: 2px; background: #1e293b; }
+        .timeline-dot { position: absolute; left: 12px; width: 18px; height: 18px; border-radius: 50%; background: var(--neon-cyan); border: 4px solid var(--bg-dark); box-shadow: 0 0 10px var(--neon-cyan); }
+
+        nav { background: rgba(2, 6, 23, 0.8); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255,255,255,0.05); }
+    </style>
+
+    <!-- scrollbar-hide injected -->
+    <style>*, *::before, *::after{scrollbar-width:none;-ms-overflow-style:none}*::-webkit-scrollbar{display:none}</style>
+</head>
+<body class="selection:bg-cyan-500 selection:text-black">
+
+    <!-- Header Navigation -->
+    <nav class="fixed top-0 w-full z-50">
+        <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-cyan-500 rounded-xl flex items-center justify-center text-black font-black text-xl shadow-[0_0_15px_#22d3ee]">V</div>
+                <span class="font-orbitron font-bold tracking-widest text-white leading-none">V.I.S.O.R.</span>
+            </div>
+            <div class="hidden lg:flex gap-8 text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400">
+                <a href="#overview" class="hover:text-cyan-400 transition-colors">ç³»çµ±æ¦‚è¦½</a>
+                <a href="#vision" class="hover:text-cyan-400 transition-colors">è¦–è¦ºç®¡é?</a>
+                <a href="#training" class="hover:text-cyan-400 transition-colors">æ¨¡å?è¨“ç·´</a>
+                <a href="#app-console" class="hover:text-cyan-400 transition-colors">ä¸­æ§ App</a>
+                <a href="#comm" class="hover:text-cyan-400 transition-colors">?šè??©é™£</a>
+                <a href="#optimization" class="hover:text-cyan-400 transition-colors">?ˆèƒ½?ªå?</a>
+                <a href="#roadmap" class="hover:text-cyan-400 transition-colors">?ªä?å±•æ?</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="relative min-h-[80vh] flex items-center justify-center pt-20 overflow-hidden">
+        <div class="absolute inset-0 z-0">
+            <div class="absolute inset-0 bg-gradient-to-b from-transparent via-bg-dark/70 to-bg-dark z-10"></div>
+            <img src="https://images.unsplash.com/photo-1558981403-c5f9899a28bc?q=80&w=2070&auto=format&fit=crop" class="w-full h-full object-cover opacity-25 grayscale scale-110">
+        </div>
+        <div class="relative z-20 text-center px-6">
+            <h1 class="text-7xl md:text-[10rem] font-black font-orbitron mb-8 tracking-tighter text-white uppercase neon-glow leading-none">V.I.S.O.R.</h1>
+            <p class="text-xl md:text-3xl text-slate-300 font-light max-w-4xl mx-auto leading-relaxed">
+                ?ºæ–¼ <span class="text-cyan-400 font-bold">Raspberry Pi 5</span> ??<span class="text-blue-400 font-bold">YOLOv8</span> ?„å…¨?¹ä?è¼”åŠ©ç³»çµ±
+            </p>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-6 py-32 space-y-64">
+
+        <!-- 1. ç³»çµ±æ¦‚è¦½ (System Overview) -->
+        <section id="overview">
+            <div class="flex items-center gap-4 mb-16">
+                <i data-lucide="scan-eye" class="text-cyan-400 w-10 h-10"></i>
+                <h2 class="text-4xl font-bold font-orbitron text-white uppercase tracking-tight">ç³»çµ±æ¦‚è¦½?‡æ ¸å¿ƒå“²å­?/h2>
+            </div>
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <div class="p-8 glass-card rounded-3xl border-t-4 border-cyan-500">
+                    <h3 class="text-2xl font-bold text-white mb-4 text-center">?¸å?å¤§è…¦ (Pi 5)</h3>
+                    <p class="text-sm text-slate-400 leading-relaxed text-center">è² è²¬ AI ?¨ç??WebSocket ä¼ºæ??¨è??¨å…µæ¨¡å??„å½±?‚å¼·å¤§ç? 8G RAM ?¯æ?é«˜æ??‹ç???/p>
+                </div>
+                <div class="p-8 glass-card rounded-3xl border-t-4 border-blue-500">
+                    <h3 class="text-2xl font-bold text-white mb-4 text-center">?°è?è¦–è¦º (Pi Zero)</h3>
+                    <p class="text-sm text-slate-400 leading-relaxed text-center">é©…å? SSD1306 OLEDï¼Œé€é? UDP å»?’­?¥æ”¶?™æ¸¬?¸æ?ä¸¦é€²è?æ¯«ç?ç´šæ¸²?“ã€?/p>
+                </div>
+                <div class="p-8 glass-card rounded-3xl border-t-4 border-purple-500">
+                    <h3 class="text-2xl font-bold text-white mb-4 text-center">ä¸­æ§ç³»çµ± (App)</h3>
+                    <p class="text-sm text-slate-400 leading-relaxed text-center">?ä? Cyberpunk é¢¨æ ¼?€è¡¨æ¿?Gemini AI è¡Œç‚º?†æ???SOS ç·Šæ€¥é€????/p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. è¦–è¦º?•ç?ç®¡é? (Vision Pipeline) -->
+        <section id="vision">
+            <div class="flex items-center gap-4 mb-16">
+                <i data-lucide="video" class="text-cyan-400 w-10 h-10"></i>
+                <h2 class="text-4xl font-bold font-orbitron text-white uppercase tracking-tight">è¦–è¦º?•ç?ç®¡é? (Vision Pipeline)</h2>
+            </div>
+            <div class="grid grid-cols-1 lg:grid-cols-4 gap-8 mb-12">
+                <div class="text-center p-6 glass-card rounded-2xl">
+                    <i data-lucide="camera" class="text-cyan-500 w-8 h-8 mx-auto mb-4"></i>
+                    <h5 class="font-bold text-white mb-2">FrameReader</h5>
+                    <p class="text-xs text-slate-500">?¨ç?ç·šç??·å? RAW å½±æ ¼</p>
+                </div>
+                <div class="text-center p-6 glass-card rounded-2xl">
+                    <i data-lucide="target" class="text-blue-500 w-8 h-8 mx-auto mb-4"></i>
+                    <h5 class="font-bold text-white mb-2">Detector</h5>
+                    <p class="text-xs text-slate-500">YOLOv8n + 320px ?ªå?</p>
+                </div>
+                <div class="text-center p-6 glass-card rounded-2xl">
+                    <i data-lucide="fingerprint" class="text-purple-500 w-8 h-8 mx-auto mb-4"></i>
+                    <h5 class="font-bold text-white mb-2">Tracker</h5>
+                    <p class="text-xs text-slate-500">Centroid ?ç?è¿½è¹¤</p>
+                </div>
+                <div class="text-center p-6 glass-card rounded-2xl">
+                    <i data-lucide="alert-triangle" class="text-orange-500 w-8 h-8 mx-auto mb-4"></i>
+                    <h5 class="font-bold text-white mb-2">Fusion</h5>
+                    <p class="text-xs text-slate-500">TTC & è·é›¢?å??¤å?</p>
+                </div>
+            </div>
+
+            <!-- Deep Dive into Tracker & BBox -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-12">
+                <div class="space-y-6">
+                    <h4 class="text-xl font-bold text-white flex items-center gap-2">
+                        <i data-lucide="binary" class="text-purple-400 w-5 h-5"></i> ?©ä»¶?ç?è¿½è¹¤ (ID Persistence)
+                    </h4>
+                    <p class="text-sm text-slate-400 leading-relaxed">
+                        ?‘å€‘å¯¦ä½œä??ºæ–¼ä¸­å?é»?(Centroid) ?„æ?å¹¾é?å¾—è??¢åŒ¹?ç?æ³•ã€‚å³ä¾?AI ?¨æ?ä¸€å¹€æ¼æª¢ï¼Œè¿½è¹¤å™¨ä»æ??¹æ?å¿«å?ä½ç½®?æ¸¬?©ä»¶è·¯å?ï¼Œä¸¦?¨è¨­å®šç??€æª»å…§ (Max Disappeared) ä¿æ??©ä»¶ ID ?„å”¯ä¸€?§ï??™å??¼è?ç®?TTC (ç¢°æ??æ??‚é?) ?„é€???§è‡³?œé?è¦ã€?
+                    </p>
+                    <div class="p-6 bg-slate-900/50 border border-slate-800 rounded-2xl">
+                        <ul class="space-y-3 text-xs text-slate-500">
+                            <li class="flex items-center gap-2"><i data-lucide="check-square" class="w-3 h-3 text-purple-500"></i> è·¨å? ID ?¹é?ï¼šé¿?è­¦?±å??µæ¸¬è·³å??Œé »ç¹é???/li>
+                            <li class="flex items-center gap-2"><i data-lucide="check-square" class="w-3 h-3 text-purple-500"></i> åº§æ?å¹³æ??–ï??æ¿¾?µæ¸¬æ¡†ç?ç´°å¾®?‡é¡«</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="space-y-6">
+                    <h4 class="text-xl font-bold text-white flex items-center gap-2">
+                        <i data-lucide="pencil-line" class="text-cyan-400 w-5 h-5"></i> ?ºæ…§æ¨™æ??‡è?è¦ºç???
+                    </h4>
+                    <p class="text-sm text-slate-400 leading-relaxed">
+                        ??Pi 5 ?¬åœ°?¢å? (`--visual` æ¨¡å?) ä¸­ï?ç³»çµ±?ƒå??•ç?å¾Œç??µæ¸¬æ¡†å??‹ç?? æ–¼ RAW å½±æ ¼?‚æ??‘æ ¹?šä¿¡å¿ƒåº¦?•æ?èª¿æ•´?Šæ?äº®åº¦ï¼Œä¸¦?¨åµæ¸¬åˆ°å¨è??‚å?ç¶ è‰²?Šæ??¬é?è½‰å??ºé?äº®ç??²ï?å¯¦ç¾è¦–è¦ºä¸Šç??´è??è­¦??
+                    </p>
+                    <div class="p-6 bg-slate-900/50 border border-slate-800 rounded-2xl">
+                        <ul class="space-y-3 text-xs text-slate-500">
+                            <li class="flex items-center gap-2"><i data-lucide="check-square" class="w-3 h-3 text-cyan-500"></i> ?•æ? Label ç¹ªè£½ï¼šé¡¯ç¤?Class Name ??Confidence</li>
+                            <li class="flex items-center gap-2"><i data-lucide="check-square" class="w-3 h-3 text-cyan-500"></i> å¨è??†ç?æ¸²æ?ï¼šæ ¹?šè??¢è‡ª?•è??›æ??²è?ç²—ç´°</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <pre><code class="font-mono">
+# vision/fusion.py
+def classify_threat(self, det, class_name, history):
+    dist = self.estimate_distance(det.bbox)
+    ttc = self.calculate_ttc(dist, history)
+    if dist < self.danger_dist or ttc < 1.5:
+        return 'DANGEROUSLY_CLOSE', dist
+    return 'STABLE', dist
+            </code></pre>
+        </section>
+
+        <!-- 3. æ¨¡å?è¨“ç·´?‡æ•¸?šå·¥ç¨?(Model Training) -->
+        <section id="training">
+            <div class="flex items-center gap-4 mb-16">
+                <i data-lucide="brain-circuit" class="text-blue-400 w-10 h-10"></i>
+                <h2 class="text-4xl font-bold font-orbitron text-white uppercase tracking-tight">æ¨¡å?è¨“ç·´?‡æ•¸?šå·¥ç¨?/h2>
+            </div>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16">
+                <div class="space-y-10">
+                    <div class="p-8 glass-card rounded-3xl border-l-8 border-blue-500">
+                        <h3 class="text-2xl font-bold text-white mb-4">BDD100K ?¸å??¸æ???/h3>
+                        <p class="text-slate-400 text-sm leading-relaxed mb-6">?¡ç”¨ Berkeley DeepDrive ?¸æ??†ï??…å« 10 ?¬æ®µé«˜æ?è¦–è??‡å?æ¨??å¤©æ°£?‚é?å°?Car, Motorcycle ç­‰é??¥é€²è? Transfer Learning??/p>
+                        <div class="grid grid-cols-2 gap-4 text-center">
+                            <div class="bg-blue-500/10 p-4 rounded-xl border border-blue-500/20"><span class="text-blue-400 font-bold block">100,000+</span><span class="text-[10px] text-slate-500">TRAINING IMAGES</span></div>
+                            <div class="bg-cyan-500/10 p-4 rounded-xl border border-cyan-500/20"><span class="text-cyan-400 font-bold block">10+</span><span class="text-[10px] text-slate-500">WEATHER TYPES</span></div>
+                        </div>
+                    </div>
+                    <div class="p-8 glass-card rounded-3xl border-l-8 border-purple-500">
+                        <h3 class="text-2xl font-bold text-white mb-4">img2blur ?¹æ??´æ™¯å¼·å?</h3>
+                        <p class="text-slate-400 text-sm leading-relaxed mb-6">?ºä?è§?±º Pi 5 ?¨å??“æ??‰ä??å?é¡Œï?å°å…¥ img2blur ç®—æ?å¼·å?å¼±å??å?è£œå??‡å??‹æ¨¡ç³Šé­¯æ£’æ€§ã€?/p>
+                    </div>
+                </div>
+                <div class="bg-slate-900/50 p-8 rounded-[2.5rem] border border-slate-800">
+                    <h4 class="text-sm font-bold text-slate-500 uppercase tracking-widest mb-10 text-center">è¨“ç·´è¶…å???/h4>
+                    <div class="space-y-8">
+                        <div><div class="flex justify-between text-xs mb-2"><span>YOLOv8-nano</span><span class="text-cyan-400">98% Stable</span></div><div class="w-full h-1 bg-slate-800 rounded-full"><div class="w-[98%] h-full bg-cyan-500 shadow-[0_0_10px_#22d3ee]"></div></div></div>
+                        <div><div class="flex justify-between text-xs mb-2"><span>Transfer Learning</span><span class="text-blue-400">Active</span></div><div class="w-full h-1 bg-slate-800 rounded-full"><div class="w-full h-full bg-blue-500 shadow-[0_0_10px_#3b82f6]"></div></div></div>
+                        <div><div class="flex justify-between text-xs mb-2"><span>Quantization</span><span class="text-purple-400">Ready</span></div><div class="w-full h-1 bg-slate-800 rounded-full"><div class="w-full h-full bg-purple-500 shadow-[0_0_10px_#a855f7]"></div></div></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. ?°è?ä¸­æ§ç³»çµ± (Console App) -->
+        <section id="app-console">
+            <div class="flex items-center gap-4 mb-16">
+                <i data-lucide="smartphone" class="text-purple-400 w-10 h-10"></i>
+                <h2 class="text-4xl font-bold font-orbitron text-white uppercase tracking-tight">?°è?ä¸­æ§ç³»çµ± (Console App)</h2>
+            </div>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 mb-16">
+                <div class="space-y-8">
+                    <h3 class="text-2xl font-bold text-white mb-4">?¨å??½ä¸­?§æ¶æ§?/h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="p-5 glass-card rounded-xl border border-slate-800"><h6 class="text-white text-xs font-bold mb-2 flex items-center gap-2"><i data-lucide="radar" class="w-3 h-3 text-blue-400"></i> æ¸¬é€Ÿé?è­?/h6><p class="text-[10px] text-slate-500 leading-relaxed">?´å??¿å? API ?‡èˆª?‘åˆ¤?·ï?ç²¾æ??’é™¤å°å?æ¸¬é€Ÿã€?/p></div>
+                        <div class="p-5 glass-card rounded-xl border border-slate-800"><h6 class="text-white text-xs font-bold mb-2 flex items-center gap-2"><i data-lucide="flask-conical" class="w-3 h-3 text-purple-400"></i> è·¯æ¸¬æ¨¡æ“¬</h6><p class="text-[10px] text-slate-500 leading-relaxed">å®¤å…§æ¨¡æ“¬?Ÿå¯¦è·¯å??æ??Ÿè??¾è?è®Šå???/p></div>
+                        <div class="p-5 glass-card rounded-xl border border-slate-800"><h6 class="text-white text-xs font-bold mb-2 flex items-center gap-2"><i data-lucide="layout-template" class="w-3 h-3 text-green-400"></i> ?Šç·£?ˆå?</h6><p class="text-[10px] text-slate-500 leading-relaxed">?¢å??Šç·£?ˆè??ˆå??´è??ˆç¾?²é?å¨è???/p></div>
+                        <div class="p-5 glass-card rounded-xl border border-slate-800"><h6 class="text-white text-xs font-bold mb-2 flex items-center gap-2"><i data-lucide="phone-call" class="w-3 h-3 text-red-400"></i> E-SOS</h6><p class="text-[10px] text-slate-500 leading-relaxed">?ªå??µæ¸¬äº‹æ??¾è?ä¸¦è§¸?¼ç°¡è¨Šé€šå ±æ©Ÿåˆ¶??/p></div>
+                    </div>
+                </div>
+                <div class="glass-card p-10 rounded-3xl">
+                    <h4 class="text-lg font-bold text-white mb-6">å¾Œè¨­?¸æ??†æ? (Gemini AI)</h4>
+                    <p class="text-sm text-slate-400 leading-relaxed">çµå? Gemini 2.5 Flashï¼Œå?è¶…é€Ÿã€æ€¥ç??‡å‚¾è§’ç†±?›å?è½‰å??ºäºº?§å??„æˆ°è¡“å»ºè­°å ±?Šã€?/p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. ?šè??©é™£ (Comm Matrix) -->
+        <section id="comm">
+            <div class="flex items-center gap-4 mb-16">
+                <i data-lucide="network" class="text-cyan-400 w-10 h-10"></i>
+                <h2 class="text-4xl font-bold font-orbitron text-white uppercase tracking-tight">?†æ•£å¼é€šè??©é™£</h2>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+                <div class="p-10 glass-card rounded-3xl border-b-4 border-cyan-500"><h4 class="text-xl font-bold text-white mb-4">UDP Broadcast</h4><p class="text-xs text-slate-500">HUD è¦–è¦º?¶å»¶?²å?æ­?/p></div>
+                <div class="p-10 glass-card rounded-3xl border-b-4 border-blue-500"><h4 class="text-xl font-bold text-white mb-4">WebSocket</h4><p class="text-xs text-slate-500">ä¸­æ§ App ?™å??‡ä»¤??/p></div>
+                <div class="p-10 glass-card rounded-3xl border-b-4 border-purple-500"><h4 class="text-xl font-bold text-white mb-4">Bluetooth SPP</h4><p class="text-xs text-slate-500">?·ç¶²?°å??™æ´?šè?</p></div>
+            </div>
+        </section>
+
+        <!-- 6. ?ˆèƒ½?ªå? (Optimization) -->
+        <section id="optimization">
+            <div class="flex items-center gap-4 mb-16">
+                <i data-lucide="zap" class="text-cyan-400 w-10 h-10"></i>
+                <h2 class="text-4xl font-bold font-orbitron text-white uppercase tracking-tight">?ˆèƒ½?ªå?é»‘ç??€</h2>
+            </div>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
+                <div class="h-[400px] glass-card p-10 rounded-3xl"><canvas id="fpsChartDetail"></canvas></div>
+                <div class="space-y-10">
+                    <div class="p-6 glass-card rounded-2xl"><h5 class="font-bold text-cyan-400 mb-2">AI è·³å? (Frame Skipping)</h5><p class="text-sm text-slate-400">AI æ¯?2 å¹€?•ç?ä¸€æ¬¡ï?è¦–è¦ºç¶­æ? 30 FPSï¼Œé?ä½?50% CPU ä½”ç”¨??/p></div>
+                    <div class="p-6 glass-card rounded-2xl"><h5 class="font-bold text-blue-400 mb-2">Asyncio ?é˜»å¡?/h5><p class="text-sm text-slate-400">ç¢ºä? AI ?‹ç?ä¸é˜»å¡?Socket ?šè?ç·šç???/p></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 7. ?ªä?å±•æ??‡æ·±åº¦å„ª??(Future Roadmap) -->
+        <section id="roadmap">
+            <div class="flex items-center gap-4 mb-16">
+                <i data-lucide="trending-up" class="text-cyan-400 w-10 h-10"></i>
+                <h2 class="text-4xl font-bold font-orbitron text-white uppercase tracking-tight">?ªä?å±•æ??‡æ·±åº¦å„ª??/h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="glass-card p-8 rounded-3xl border-t-2 border-cyan-500">
+                    <i data-lucide="microchip" class="text-cyan-400 w-8 h-8 mb-6"></i>
+                    <h4 class="text-lg font-bold text-white mb-4">AI ?‹ç?å¼·å?</h4>
+                    <p class="text-xs text-slate-500 leading-relaxed">
+                        è¨ˆç•«å°å…¥ OpenVINO æ¨¡å?? é€Ÿæ??¶ï?ä¸¦å? Centroid Tracker ?‡ç??ºå¡?¾æ›¼æ¿¾æ³¢??(Kalman Filter)ï¼Œæ??‡ç‰©ä»¶é®?‹æ??„è¿½è¹¤ç©©å®šåº¦??
+                    </p>
+                </div>
+                <div class="glass-card p-8 rounded-3xl border-t-2 border-blue-500">
+                    <i data-lucide="battery-charging" class="text-blue-400 w-8 h-8 mb-6"></i>
+                    <h4 class="text-lg font-bold text-white mb-4">?ºæ…§?»æ?ç®¡ç?</h4>
+                    <p class="text-xs text-slate-500 leading-relaxed">
+                        ??? GPIO ?‡æ?è»Šé›»?€ï¼Œå¯¦?¾è‡ª?•é?ä¹??¨å…µæ¨¡å??‡æ?ï¼›ä¸¦?¹æ? CPU æº«åº¦?•æ?èª¿æ•´è·³å??‡ï?ç¢ºä??¨å??¥ç’°å¢ƒä??„ç©©å®šæ€§ã€?
+                    </p>
+                </div>
+                <div class="glass-card p-8 rounded-3xl border-t-2 border-purple-500">
+                    <i data-lucide="zap" class="text-purple-400 w-8 h-8 mb-6"></i>
+                    <h4 class="text-lg font-bold text-white mb-4">äºŒé€²ä??”è­°</h4>
+                    <p class="text-xs text-slate-500 leading-relaxed">
+                        ?šè? Payload å°‡å? JSON ?·ç§»??Protobuf ?¼å?ï¼Œä¸¦å°å…¥ WebRTC ?€è¡“ï?å¯¦ç¾ App ç«¯è?ä¹?0 å»¶é²?„å½±?ä¸²æµã€?
+                    </p>
+                </div>
+                <div class="glass-card p-8 rounded-3xl border-t-2 border-green-500">
+                    <i data-lucide="mic" class="text-green-400 w-8 h-8 mb-6"></i>
+                    <h4 class="text-lg font-bold text-white mb-4">?¨æ?å®˜ä???/h4>
+                    <p class="text-xs text-slate-500 leading-relaxed">
+                        ?‹ç™¼èªéŸ³?§åˆ¶æ¨¡ç??‡å€‹äºº?–å±?ªè·¯?–ç³»çµ±ï?å°‡é?å£«å?æ¬¡æ€¥ç??„åœ°é»æ?è¨˜ç‚º?Œå?å±¬è­¦?’å??“ã€ï?å¯¦ç¾ä¸»å?å¼é??²ã€?
+                    </p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="py-24 border-t border-slate-900 text-center opacity-50">
+        <p class="text-slate-600 text-[10px] font-mono tracking-[0.8em] uppercase">V.I.S.O.R. Technical Whitepaper &copy; 2026</p>
+    </footer>
+
+    <script>
+        lucide.createIcons();
+        const ctx = document.getElementById('fpsChartDetail').getContext('2d');
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['v0.1', 'v0.5', 'v1.0', 'Optimized'],
+                datasets: [{
+                    label: 'FPS',
+                    data: [6, 12, 25, 28],
+                    borderColor: '#22d3ee',
+                    backgroundColor: 'rgba(34, 211, 238, 0.1)',
+                    fill: true,
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: { grid: { color: '#1e293b' }, ticks: { color: '#64748b' } },
+                    y: { grid: { color: '#1e293b' }, ticks: { color: '#64748b' } }
+                },
+                plugins: { legend: { display: false } }
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,17 @@
+[Unit]
+Description=V.I.S.O.R. Pi 5 Main Controller Service
+After=network.target sound.target bluetooth.target
+
+[Service]
+Type=simple
+User=pi5
+WorkingDirectory=/home/pi5/motorcycle_assist
+ExecStart=/bin/bash /home/pi5/motorcycle_assist/run.sh
+Restart=always
+RestartSec=3
+TimeoutStopSec=3
+KillMode=mixed
+Environment=PYTHONUNBUFFERED=1
+
+[Install]
+WantedBy=multi-user.target

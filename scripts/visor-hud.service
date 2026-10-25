@@ -1,0 +1,16 @@
+[Unit]
+Description=V.I.S.O.R. HUD Client
+After=network.target
+
+[Service]
+ExecStart=/home/pi/hud_env/bin/python3 /home/pi/motorcycle_assist/hud/hud_client.py
+WorkingDirectory=/home/pi/motorcycle_assist/hud
+StandardOutput=inherit
+StandardError=inherit
+Environment="HUD_MIRROR=1"
+Environment="HUD_FLIP_V=0"
+Restart=always
+User=pi
+
+[Install]
+WantedBy=multi-user.target

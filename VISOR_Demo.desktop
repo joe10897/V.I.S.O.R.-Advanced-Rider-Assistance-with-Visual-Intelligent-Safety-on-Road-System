@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=V.I.S.O.R. Core (Visual Demo)
+Comment=Start V.I.S.O.R. in Demo Mode with Local Screen
+Exec=lxterminal -e bash /home/pi5/motorcycle_assist/scripts/launch_visor_visual.sh
+Icon=video-display
+Terminal=false
+Type=Application
+Categories=Development;Utility;

@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Name=VISOR Demo
+Exec=lxterminal -e bash -c "cd /home/pi5/motorcycle_assist && DISPLAY=:0 /home/pi5/motorcycle_assist/venv/bin/python3 main_controller.py --visual; read -p 'System Stopped. Press Enter to close...'"
+Icon=video-display
+Terminal=false
+Categories=Utility;

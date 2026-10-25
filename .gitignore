@@ -1,0 +1,170 @@
+# =============================================================================
+# V.I.S.O.R. (Visor Intelligent Smart Operations & Reporting) - .gitignore
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# 1. Python 執行環境與編譯快取 (Python & Bytecode Cache)
+# -----------------------------------------------------------------------------
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# -----------------------------------------------------------------------------
+# 2. 虛擬環境 (Virtual Environments)
+# -----------------------------------------------------------------------------
+venv/
+.venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# -----------------------------------------------------------------------------
+# 3. 單元測試與測試快取 (Testing & Coverage)
+# -----------------------------------------------------------------------------
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.nox/
+.hypothesis/
+nosetests.xml
+coverage.xml
+
+# -----------------------------------------------------------------------------
+# 4. 前端與 Cordova 行動應用程式建置產物 (Frontend & Mobile App Builds)
+# -----------------------------------------------------------------------------
+node_modules/
+platforms/
+plugins/
+*.apk
+*.aab
+*.apks
+*.keystore
+*.jks
+www/*.bak
+www/temp_*.txt
+
+# -----------------------------------------------------------------------------
+# 5. AI 模型與大型權重檔案 (AI Models & Weights)
+# -----------------------------------------------------------------------------
+*.pt
+*.pth
+*.onnx
+*.tflite
+*.pb
+*.bin
+*.pkl
+*.engine
+*.weights
+models/
+YOLOv26_DEMO/models/
+YOLOv26_DEMO/demo_export/
+
+# 若需強制追蹤特定輕量化部署權重，可取消下方註解：
+# !models/yolo26n_tw_titan.onnx
+# !models/lstr_culane.pkl
+
+# -----------------------------------------------------------------------------
+# 6. 訓練資料集與模型訓練產出 (Datasets & Training Artifacts)
+# -----------------------------------------------------------------------------
+datasets/
+datasets.zip
+bdd100k/
+bdd_mini/
+img2blur/
+runs/
+*/runs/
+YOLOv26_DEMO/datasets/
+YOLOv26_DEMO/runs/
+*.zip
+*.tar.gz
+*.tgz
+*.7z
+*.rar
+
+# -----------------------------------------------------------------------------
+# 7. 影音媒體、行車紀錄與哨兵事件錄影 (Media, Dashcam & Sentry Recordings)
+# -----------------------------------------------------------------------------
+*.mp4
+*.avi
+*.mov
+*.mkv
+*.flv
+*.webm
+sample_videos/
+recordings/
+events/
+trips/
+YOLOv26_DEMO/outputs/
+YOLOv26_DEMO/out_*.jpg
+
+# -----------------------------------------------------------------------------
+# 8. 論文文件、大型簡報與開發暫存腳本 (Thesis, Presentations & Scratch Files)
+# -----------------------------------------------------------------------------
+*.pptx
+*.docx
+*.pdf
+報告/
+build_thesis/
+presentation/
+YOLOv26_DEMO/presentation.html
+YOLOv26_DEMO/*20260513*
+scratch/
+scratch_*.txt
+tmp/
+temp/
+conductor/tracks/*/tmp/
+fusion_b64.txt
+main_b64.txt
+snapshot.txt
+patch_*.py
+inspect_*.py
+update_word.ps1
+Finalizing V.I.S.O.R. System Integration.md
+
+# -----------------------------------------------------------------------------
+# 9. IDE、編輯器與 AI 輔助工具設定 (IDE, Editors & Agent Configs)
+# -----------------------------------------------------------------------------
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.opencode/
+Skills-main/
+
+# -----------------------------------------------------------------------------
+# 10. 作業系統、日誌與機密憑證 (OS, Logs & Secrets)
+# -----------------------------------------------------------------------------
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+Desktop.ini
+*.log
+logs/
+.env
+.env.*
+*.pem
+*.key

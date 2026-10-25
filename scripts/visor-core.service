@@ -1,0 +1,16 @@
+[Unit]
+Description=V.I.S.O.R. Main Controller (Pi 5)
+After=network.target
+
+[Service]
+ExecStart=/bin/bash /home/pi5/motorcycle_assist/scripts/launch_visor_headless.sh
+WorkingDirectory=/home/pi5/motorcycle_assist
+StandardOutput=inherit
+StandardError=inherit
+Restart=always
+RestartSec=10
+User=pi5
+Environment=PYTHONUNBUFFERED=1
+
+[Install]
+WantedBy=multi-user.target

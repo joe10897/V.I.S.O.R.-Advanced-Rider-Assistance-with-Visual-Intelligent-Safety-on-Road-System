@@ -1,0 +1,51 @@
+{
+  "network": {
+    "broadcast_ip": "255.255.255.255",
+    "udp_port": 5005,
+    "hud_listener_port": 5006,
+    "websocket_port": 8765,
+    "websocket_host": "0.0.0.0"
+  },
+  "vision": {
+    "source": "/dev/video2",
+    "source_front": "/dev/video0",
+    "source_front_type": "usb",
+    "source_rear": "/dev/video2",
+    "source_rear_type": "usb",
+    "sensor_model": "Sony IMX662 STARVIS 2 (USB 2.0)",
+    "fov_front": 120,
+    "fov_rear": 173,
+    "focal_length_front": 260,
+    "focal_length_rear": 185,
+    "rotate_front": 0,
+    "rotate_rear": 0,
+    "model_path": "models/yolo26n_tw_titan.onnx",
+    "lane_model": "cv_magnet",
+    "lane_skip": 0,
+    "device": "cpu",
+    "focal_length": 260,
+    "conf_threshold": 0.15,
+    "imgsz": [288, 384],
+    "rect": true
+  },
+  "thresholds": {
+    "danger_dist": 10.0,
+    "warning_dist": 25.0,
+    "tilt_alert": 18.0,
+    "rear_threat_cy": 0.4
+  },
+  "system": {
+    "hud_timeout": 5.0,
+    "exhibition_mode_default": false
+  },
+  "hud_config": {
+    "speed": true,
+    "camera": true,
+    "nav": true,
+    "time": true,
+    "brightness": 128,
+    "mirror": true,
+    "flip_v": false,
+    "oled_model": "SSD1306"
+  }
+}

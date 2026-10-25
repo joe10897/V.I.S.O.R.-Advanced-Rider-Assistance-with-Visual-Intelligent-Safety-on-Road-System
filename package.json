@@ -1,0 +1,25 @@
+{
+  "scripts": {
+    "build": "node www/build.mjs",
+    "build:watch": "node www/build.mjs --watch"
+  },
+  "devDependencies": {
+    "cordova-android": "^14.0.1",
+    "cordova-plugin-android-permissions": "^1.1.5",
+    "cordova-plugin-bluetooth-serial": "^0.4.7",
+    "cordova-plugin-sms": "^1.0.5",
+    "cordova-plugin-whitelist": "1",
+    "esbuild": "^0.28.1"
+  },
+  "cordova": {
+    "plugins": {
+      "cordova-plugin-bluetooth-serial": {},
+      "cordova-plugin-whitelist": {},
+      "cordova-plugin-android-permissions": {},
+      "cordova-plugin-sms": {}
+    },
+    "platforms": [
+      "android"
+    ]
+  }
+}
