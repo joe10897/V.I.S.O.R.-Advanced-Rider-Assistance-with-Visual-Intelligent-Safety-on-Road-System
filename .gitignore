@@ -1,5 +1,6 @@
 # =============================================================================
-# V.I.S.O.R. (Visor Intelligent Smart Operations & Reporting) - .gitignore
+# V.I.S.O.R. (Visual Intelligent Safety on Road | 智慧視覺機車安全行車輔助系統)
+# Git Ignore Configuration (.gitignore)
 # =============================================================================
 
 # -----------------------------------------------------------------------------
@@ -124,7 +125,9 @@ YOLOv26_DEMO/out_*.jpg
 *.pdf
 報告/
 build_thesis/
-presentation/
+presentation/*
+!presentation/img/
+!presentation/gif/
 YOLOv26_DEMO/presentation.html
 YOLOv26_DEMO/*20260513*
 scratch/

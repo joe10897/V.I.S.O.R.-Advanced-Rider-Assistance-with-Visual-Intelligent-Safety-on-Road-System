@@ -1,109 +1,188 @@
-# V.I.S.O.R. — Visor Intelligent Smart Operations & Reporting
-### 智慧型二輪載具主動安全輔助、邊緣視覺感知與光學抬頭顯示系統
+<div align="center">
 
-![Python](https://img.shields.io/badge/Python-3.9%2B-3776AB?style=for-the-badge&logo=python&logoColor=white)
-![Raspberry Pi](https://img.shields.io/badge/Raspberry%20Pi-5%20%7C%20Zero%202W-C51A4A?style=for-the-badge&logo=raspberry-pi&logoColor=white)
-![ONNX Runtime](https://img.shields.io/badge/ONNX%20Runtime-Edge%20AI-005CED?style=for-the-badge&logo=onnx&logoColor=white)
-![React](https://img.shields.io/badge/Mobile%20App-React%20%7C%20Cordova-61DAFB?style=for-the-badge&logo=react&logoColor=black)
-![Bluetooth](https://img.shields.io/badge/Comm-WebSocket%20%7C%20RFCOMM%20%7C%20UDP-0082FC?style=for-the-badge&logo=bluetooth&logoColor=white)
+<img src="www/img/logo.png" alt="V.I.S.O.R. Logo" width="165" />
 
-**V.I.S.O.R. (Visor Intelligent Smart Operations & Reporting)** 是一套專為台灣高密度二輪車流環境量身打造的**分散式邊緣運算機車主動安全輔助系統 (Motorcycle ADAS)**。系統以 **Raspberry Pi 5** 作為車載 AI 視覺與通訊中樞，結合 **Raspberry Pi Zero 2W** 安全帽光學反射式抬頭顯示器（HUD）以及 **Android 跨平台戰術行動端 App**，為騎士提供全天候前後雙鏡頭盲點偵測（BSD）、前方防撞預警（FCW）、車道偏移感知、測速照相提醒、哨兵行車紀錄以及事故 E-SOS 自動求救功能。
+# V.I.S.O.R.
+### **V**isual **I**ntelligent **S**afety **o**n **R**oad
+### 智慧視覺機車安全行車輔助系統
+**Advanced Rider Assistance with Visual Intelligent Safety on Road**
 
----
+[![Python](https://img.shields.io/badge/Python-3.9%2B-3776AB?style=for-the-badge&logo=python&logoColor=white)](#)
+[![Raspberry Pi](https://img.shields.io/badge/Edge%20Hardware-Raspberry%20Pi%205%20%2B%20Zero%202W-C51A4A?style=for-the-badge&logo=raspberry-pi&logoColor=white)](#)
+[![YOLO26n](https://img.shields.io/badge/Edge%20AI-YOLO26n%20(2.37M%20%7C%204%3A3%20Rect)-005CED?style=for-the-badge&logo=onnx&logoColor=white)](#)
+[![Mobile App](https://img.shields.io/badge/Mobile%20App-React%20%7C%20Cordova-61DAFB?style=for-the-badge&logo=react&logoColor=black)](#)
+[![Protocol](https://img.shields.io/badge/Comm-WebSocket%20%7C%20RFCOMM%20%7C%20UDP-0082FC?style=for-the-badge&logo=bluetooth&logoColor=white)](#)
 
-## 📑 目錄 (Table of Contents)
-
-- [系統設計理念與核心亮點](#-系統設計理念與核心亮點)
-- [系統架構與通訊拓樸](#-系統架構與通訊拓樸)
-- [核心技術與子系統詳解](#-核心技術與子系統詳解)
-  - [1. 邊緣視覺感知管線 (Edge AI Vision Pipeline)](#1-邊緣視覺感知管線-edge-ai-vision-pipeline)
-  - [2. 空間幾何融合與 TTC 威脅分級 (SpatialFusion v2)](#2-空間幾何融合與-ttc-威脅分級-spatialfusion-v2)
-  - [3. 光學反射式抬頭顯示器 (V.I.S.O.R. HUD)](#3-光學反射式抬頭顯示器-visor-hud)
-  - [4. 雙通道零延遲容錯通訊架構 (Dual-Channel Comm)](#4-雙通道零延遲容錯通訊架構-dual-channel-comm)
-  - [5. 哨兵模式、車載黑盒子與 E-SOS 緊急救援](#5-哨兵模式車載黑盒子與-e-sos-緊急救援)
-  - [6. 戰術行動端應用程式 (Tactical Mobile App)](#6-戰術行動端應用程式-tactical-mobile-app)
-- [AI 模型效能基準與實驗數據](#-ai-模型效能基準與實驗數據)
-- [硬體規格與接線配置](#-硬體規格與接線配置)
-- [專案目錄結構](#-專案目錄結構)
-- [安裝與快速啟動指南](#-安裝與快速啟動指南)
-- [系統參數配置說明 (`config.json`)](#-系統參數配置說明-configjson)
-- [自動化部署與硬體診斷測試](#-自動化部署與硬體診斷測試)
+<p align="center">
+  <strong>🌐 Language / 語言導覽：</strong>
+  <a href="#-實車道路實測與系統動態展示-live-road-test--visual-showcase">🎬 動態實測展示 (Visual Showcase)</a> •
+  <a href="#-繁體中文說明文件-traditional-chinese">🇹🇼 繁體中文完整說明</a> •
+  <a href="#-english-documentation-v-i-s-o-r">🇺🇸 English Documentation</a> •
+  <a href="#-快速啟動與部署指南-quick-start--deployment">🚀 快速啟動 (Quick Start)</a>
+</p>
 
 ---
 
-## ✨ 系統設計理念與核心亮點
+| 🛡️ **全景盲區覆蓋 (Panoramic FOV)** | ⚡ **純 CPU 邊緣延遲 (Edge Latency)** | 🧠 **極致輕量模型 (YOLO26n-TW)** | 🔋 **車載低功耗 (Power Draw)** |
+| :---: | :---: | :---: | :---: |
+| **280°** (`Front 120° + Rear 173°`) | **26 – 41 ms** (`24–39 FPS`) | **2.37M Params** (`5.3 GFLOPs`) | **< 15 W** (`12V 機車電瓶直驅`) |
 
-在台灣高密度的混合車流中，機車騎士面臨「後視鏡盲區大」、「轉頭查看路況導致視線離開前方」以及「突發逼車與急煞反應時間極短」三大安全痛點。V.I.S.O.R. 透過軟硬體深度協同設計解決上述問題：
-
-* **🎯 專為台灣路況微調的 Edge AI 模型 (`YOLOv26n-TW Titan`)**
-  結合台灣道路實景與夜間盲點資料集（共 3,638 張標註影像，修正大面積重疊與誤標問題），針對 `pedestrian`（行人）、`scooter`（機車）、`car`（汽車）、`bicycle`（自行車）、`truck`（大型車/公車/貨車）進行 5 類別精準辨識。
-* **⚡ 非對稱式乒乓排程器 (Asymmetric Ping-Pong AI Scheduler)**
-  在無獨立 GPU 的 Raspberry Pi 5 上，以 20Hz 主迴圈交替執行前後雙鏡頭推論；當後方出現連續逼近危險（Danger Streak）時，自動提高後鏡頭防禦推論優先級。
-* **📐 單目視覺測距與卡爾曼濾波 TTC 預警 (`SpatialFusion v2`)**
-  無需昂貴光達（LiDAR）或毫米波雷達，依據各車種真實物理寬度與 Sony IMX662 雙鏡頭焦距（前 120° / 後 173° 廣角）進行單目距離估計，結合 Kalman EMA 相對速度追蹤與碰撞時間（Time-to-Collision, TTC）演算法，實現零硬體成本的 4 級防撞預警。
-* **🥽 安全帽光學反射式 HUD (`SSD1306 / SH1106 128×64 OLED`)**
-  內建水平鏡像（Mirror）與垂直翻轉（Vertical Flip）光學矩陣轉換，配合多重單播/廣播自動探測機制（Unicast + Broadcast Auto-Discovery），確保在熱點、公共 Wi-Fi 或實體線材環境下皆能維持 20 FPS 穩定顯示與 `<5ms` 同步延遲。
-* **🛡️ Wi-Fi WebSocket + 原生藍牙 RFCOMM 雙通道無感切換**
-  內建 D-Bus 免螢幕自動配對代理人（`visor_bt_agent.py`），解決車載無頭（Headless）環境下新手機配對問題；藍牙端採用單一指令佇列執行緒與 512-byte 原子化分塊傳輸，徹底杜絕執行緒洩漏（Thread Exhaustion）與 JSON 黏包問題。
+</div>
 
 ---
 
-## 🏗️ 系統架構與通訊拓樸
+## 🎬 實車道路實測與系統動態展示 (Live Road-Test & Visual Showcase)
 
-本系統由三大獨立硬體節點與雲端分析資料庫組成，透過異質網路協議進行低延遲協同運作：
+> **V.I.S.O.R. (Visual Intelligent Safety on Road)** 於真實道路行車紀錄影像（1280×720 原始輸入、4:3 原生幾何 `384×288` 推論）之端到端即時視覺感知成果。系統同步執行 **YOLO26n 台灣車流物件偵測**、**LSTR / CV-Magnet 車道線擬合**、**單目物理車寬測距** 與 **四階邊緣消抖防護引擎 (4-Stage Sentinel Engine)**。
+>
+> *End-to-end real-road validation of **V.I.S.O.R.** running on 1280×720 dashcam footage with native 4:3 rectangular inference (`384×288`), combining **YOLO26n object detection**, **LSTR / CV-Magnet lane fitting**, **monocular distance estimation**, and the **4-Stage Sentinel De-jitter Engine**.*
+
+### 1. 四大真實道路情境實測矩陣 (4-Scenario Real-Road Validation Matrix)
+
+<table>
+  <tr>
+    <td width="50%" align="center">
+      <img src="presentation/gif/demo_urban_f0ace550.gif" alt="Urban Mixed Traffic" width="100%" />
+      <br />
+      <b>🏙️ 場景一：市區密集混合車流實測 (24.2 FPS)</b><br />
+      <sub><i>Scene 1: Dense Urban Mixed Traffic — Multi-scooter tracking & ego-lane gating</i></sub>
+    </td>
+    <td width="50%" align="center">
+      <img src="presentation/gif/demo_highway_50c9816b.gif" alt="Expressway High Speed" width="100%" />
+      <br />
+      <b>🛣️ 場景二：快速道路高架高速實測 (27.5 FPS)</b><br />
+      <sub><i>Scene 2: Expressway High-Speed Cruising — Long-range LSTR curve prediction & TTC</i></sub>
+    </td>
+  </tr>
+  <tr>
+    <td width="50%" align="center">
+      <img src="presentation/gif/demo_weaving_84ccd719_1.5x.gif" alt="Weaving & Overtaking" width="100%" />
+      <br />
+      <b>🏍️ 場景三：車流穿梭超車動態追蹤 (1.5× Speed)</b><br />
+      <sub><i>Scene 3: Dynamic Weaving & Overtaking — Schmitt hysteresis anti-flicker protection</i></sub>
+    </td>
+    <td width="50%" align="center">
+      <img src="presentation/gif/demo_blindspot_crush_2.gif" alt="Rear Blind Spot Warning" width="100%" />
+      <br />
+      <b>🚨 場景四：後方盲區逼近防碰撞預警 (39.1 FPS)</b><br />
+      <sub><i>Scene 4: Rear Blind-Spot Approaching — Rapid TTC < 1.0s CRITICAL alert triggering</i></sub>
+    </td>
+  </tr>
+</table>
+
+---
+
+### 2. 核心架構與視覺化感知展示 (Core Architecture & Perception Visuals)
+
+<table>
+  <tr>
+    <td width="33%" align="center">
+      <img src="presentation/gif/slide3_radar_sweep.gif" alt="280 Degree Radar Sweep" width="100%" />
+      <br />
+      <b>📡 280° 全景盲區雷達與動態威脅分區</b><br />
+      <sub><i>280° Panoramic FOV & Threat Zone Partitioning</i></sub>
+    </td>
+    <td width="33%" align="center">
+      <img src="presentation/gif/slide5_threejs_edge.gif" alt="Dual-Node Edge Architecture" width="100%" />
+      <br />
+      <b>🖧 分散式雙節點邊緣運算解耦架構</b><br />
+      <sub><i>Decoupled Dual-Node Edge Computing (Pi 5 + Pi Zero 2W)</i></sub>
+    </td>
+    <td width="33%" align="center">
+      <img src="presentation/gif/slide9_benchmark_loop.gif" alt="Benchmark Loop" width="100%" />
+      <br />
+      <b>📊 V.I.S.O.R. 全天候精準度與效能基準</b><br />
+      <sub><i>All-Weather Precision & Edge Latency Benchmark</i></sub>
+    </td>
+  </tr>
+</table>
+
+---
+
+### 3. V.I.S.O.R. 戰術行動端應用程式介面 (Tactical Mobile App Interface)
+
+<div align="center">
+  <img src="presentation/img/visor_app_screenshot.jpeg" alt="V.I.S.O.R. Mobile App Interface" width="96%" />
+  <p>
+    <sub>
+      <b>▲ V.I.S.O.R. 行動端四大核心畫面 (Four Core Mobile Screens)：</b>
+      (1) 雙鏡頭即時串流、系統狀態、E-SOS 緊急求救與哨兵待機主控台；
+      (2) 本月安全評分、實機硬體偵測紀錄與 AI 戰術行為分析；
+      (3) 近 7 日評分趨勢與近 30 天超速熱力日曆；
+      (4) 急煞與危險傾角事件之詳細時空座標與路段限速對照卡。
+    </sub>
+  </p>
+</div>
+
+---
+
+# 🇹🇼 繁體中文說明文件 (Traditional Chinese)
+
+## 📌 一、研究背景與系統定位 (Background & Overview)
+
+在高密度混合車流的台灣道路環境中，機車登記數超過 1,440 萬輛，機車騎士是最顯著的**弱勢道路使用者 (Vulnerable Road Users, VRUs)**。根據交通部統計，台灣交通事故死傷中機車涉入率高達 **61.74%**，且由於缺乏剛性車體保護，機車事故致死率高達小客車的 **28 倍**。然而，市售汽車級 ADAS（先進駕駛輔助系統）仰賴昂貴的光達、毫米波雷達與高功耗 GPU，因成本與體積限制無法普及於一般二輪載具。
+
+為推動**「交通平權 (Traffic Equity) — 主動安全不是汽車的特權」**，本研究提出 **V.I.S.O.R. (Visual Intelligent Safety on Road，智慧視覺機車安全行車輔助系統)**：
+* **純視覺低成本主動防護盾**：結合前向 120° 廣角與後向 173° 超廣角星光級雙鏡頭（Sony IMX662 STARVIS 2），實現近 **280° 無盲區全景覆蓋**。
+* **分散式雙節點硬體解耦**：將「AI 視覺推論（車身 Raspberry Pi 5）」與「安全帽光學抬頭顯示（Raspberry Pi Zero 2W + I2C OLED）」實體解耦，透過微秒級 UDP 廣播/單播協議（`<1.2ms` 網路延遲）同步，徹底根除資源爭用、掉幀與畫面撕裂。
+* **直覺零認知負荷人機介面 (Minimalist HMI)**：將複雜的道路空間運算濃縮為安全帽反射片上的**極簡四向方向箭頭、硬體反白閃爍警示與雙頻蜂鳴器提示**，搭配 **Android 戰術行動端 App** 與 **Supabase 雲端大數據分析**，在事發前提供毫秒級預警。
+
+---
+
+## 🏗️ 二、系統架構與管線流程圖 (System Architecture & Pipeline Diagrams)
+
+### 2.1 端到端硬體與異質網路拓樸 (End-to-End Hardware & Network Topology)
 
 ```mermaid
 flowchart TB
-    subgraph Sensors["📷 雙鏡頭與感測輸入層 (Sensors)"]
-        CamFront["前向廣角鏡頭 (Front Cam)<br/>Sony IMX662 STARVIS 2<br/>FOV 120° | f=260"]
-        CamRear["後向超廣角鏡頭 (Rear Cam)<br/>Sony IMX662 STARVIS 2<br/>FOV 173° | f=185"]
+    subgraph Sensors["📷 星光級雙鏡頭感測層 (Dual STARVIS 2 Cameras)"]
+        CamFront["前向廣角鏡頭 (Front ADAS Cam)<br/>Sony IMX662 STARVIS 2<br/>FOV 120° | f = 260 px"]
+        CamRear["後向超廣角鏡頭 (Rear BSD Cam)<br/>Sony IMX662 STARVIS 2<br/>FOV 173° | f = 185 px"]
     end
 
-    subgraph Pi5["🧠 V.I.S.O.R. Core 車載運算中樞 (Raspberry Pi 5)"]
-        FrameReader["FrameReader 雙路非同步擷取<br/>V4L2 VIDIOC_QUERYCAP 節點過濾"]
-        Scheduler["Asymmetric Ping-Pong 排程器<br/>20Hz 雙鏡頭交替推論與威脅鎖定"]
+    subgraph Pi5["🧠 V.I.S.O.R. Core 車載運算中樞 (Raspberry Pi 5 — 8GB RAM)"]
+        FrameReader["FrameReader 雙路非同步擷取<br/>V4L2 VIDIOC_QUERYCAP 節點過濾與防衝突"]
+        Scheduler["Asymmetric Ping-Pong 排程器<br/>20Hz 雙鏡頭交替推論 + 後方危險優先鎖定"]
         
-        subgraph AIPipeline["VisorCore 邊緣視覺引擎"]
-            YOLO["YOLOv26n-TW Titan<br/>5-Class 台灣車流物件偵測"]
-            Lane["車道線感知引擎<br/>CV-Magnet (0.4ms) / LSTR / UFLD v2"]
-            Fusion["SpatialFusion v2<br/>單目測距 + Kalman EMA 相對速度 + TTC"]
+        subgraph AIPipeline["VisorCore 邊緣視覺感知與四階消抖管線"]
+            Preproc["4:3 原生幾何前處理 (384×288)<br/>CLAHE 自適應均衡 + 算力節省 64%"]
+            YOLO["YOLO26n-TW Titan (2.37M)<br/>5 類別台灣混流偵測 + P3 小目標強化"]
+            Lane["輕量車道線感知引擎<br/>CV-Magnet (0.4ms) / LSTR (11.6ms)"]
+            Sentinel["SpatialFusion v2 四階邊緣消抖引擎<br/>①行人分流 ➔ ②雙指數 EMA ➔ ③速率門檻 ➔ ④施密特遲滯"]
         end
 
-        Recorder["DashcamRecorder 哨兵循環錄影<br/>衝擊/傾角觸發事件鎖檔"]
-        TripLogger["TripLogger 車載黑盒子<br/>非同步雙緩衝 CSV 紀錄 (<0.1% CPU)"]
+        Recorder["DashcamRecorder 哨兵循環錄影<br/>環形緩衝區 + 傾角/衝擊事件鎖檔"]
+        TripLogger["TripLogger 車載黑盒子<br/>非同步佇列 CSV 路測紀錄 (<0.1% CPU)"]
         
-        CommHub["多協定通訊匯流排<br/>WebSocket (8765) | BT RFCOMM (Ch.1) | UDP (5005/5006)"]
+        CommHub["多協定容錯通訊匯流排 (Dual-Channel Comm Hub)<br/>WebSocket (:8765) | BT RFCOMM (Ch.1) | UDP (:5005/:5006)"]
     end
 
-    subgraph PiZero["🥽 V.I.S.O.R. HUD 抬頭顯示端 (Raspberry Pi Zero 2W)"]
-        HudClient["HudClient 接收與渲染引擎<br/>多路心跳回報 (pi5.local / 192.168.4.1)"]
-        OLED["1.3\" / 0.96\" I2C OLED (128x64)<br/>SSD1306 / SH1106 光學鏡像與反白閃爍警示"]
+    subgraph PiZero["🥽 V.I.S.O.R. HUD 抬頭顯示節點 (Raspberry Pi Zero 2W)"]
+        HudClient["HudClient 三執行緒零積壓引擎<br/>多路單播/廣播心跳回報 (pi5.local / 192.168.4.1)"]
+        OLED["1.3\" / 0.96\" I2C OLED (128×64)<br/>SSD1306 / SH1106 光學鏡像與硬體反白閃爍"]
     end
 
     subgraph MobileApp["📱 V.I.S.O.R. 戰術行動端 (Android Cordova / React)"]
-        UI["戰術儀表板與雙鏡頭即時預覽<br/>Tactical Log / 遠端電源與 HUD 調光控制"]
-        Geo["GPS 測速照相預警系統<br/>全台測速點位資料庫 + Haversine 距離解算"]
-        ESOS["E-SOS 緊急救援模組<br/>嚴重傾倒偵測自動發送求救簡訊"]
+        UI["雙鏡頭即時預覽與戰術儀表板<br/>Tactical Log / 遠端 HUD 調光 / 雙機安全關機"]
+        Geo["GPS 全台測速照相預警系統<br/>離線 1,967 點位資料庫 + Haversine 解算"]
+        ESOS["E-SOS 緊急救援通報模組<br/>嚴重傾倒 (>18°) 自動發送求救簡訊"]
     end
 
-    subgraph Cloud["☁️ 雲端數據分析層"]
-        Supabase[("Supabase 雲端資料庫<br/>騎乘軌跡 / 急煞 / 超速 / 傾角統計")]
+    subgraph Cloud["☁️ 雲端分析與持久層 (Cloud Analytics)"]
+        Supabase[("Supabase 雲端資料庫<br/>安全評分 / 急煞 / 超速 / 危險傾角分析")]
     end
 
     CamFront --> FrameReader
     CamRear --> FrameReader
     FrameReader --> Scheduler
     FrameReader --> Recorder
-    Scheduler --> YOLO
-    Scheduler --> Lane
-    YOLO --> Fusion
-    Lane --> Fusion
-    Fusion --> TripLogger
-    Fusion --> CommHub
+    Scheduler --> Preproc --> YOLO & Lane --> Sentinel
+    Sentinel --> TripLogger
+    Sentinel --> CommHub
 
-    CommHub -- "UDP Broadcast/Unicast :5005 (20Hz 遙測與威脅)" --> HudClient
-    HudClient -- "UDP Heartbeat :5006 (狀態與 IP 回報)" --> CommHub
-    HudClient -- "I2C (0x3C)" --> OLED
+    CommHub -- "UDP Broadcast/Unicast :5005 (<128B, <1.2ms, 20Hz)" --> HudClient
+    HudClient -- "UDP Heartbeat :5006 (自動鎖定單播 IP)" --> CommHub
+    HudClient -- "I2C Bus (0x3C)" --> OLED
 
     CommHub <-- "Wi-Fi WebSocket :8765 / Bluetooth RFCOMM Ch.1" --> UI
     UI --> Geo
@@ -113,152 +192,178 @@ flowchart TB
 
 ---
 
-## 🔬 核心技術與子系統詳解
+### 2.2 四階邊緣消抖防護引擎流程 (4-Stage Sentinel De-Jitter Pipeline)
 
-### 1. 邊緣視覺感知管線 (Edge AI Vision Pipeline)
-位於 [`YOLOv26_DEMO/`](file:///C:/Users/USER/Desktop/motorcycle_assist/YOLOv26_DEMO) 與 [`vision/`](file:///C:/Users/USER/Desktop/motorcycle_assist/vision) 目錄中，由 [`VisorCore`](file:///C:/Users/USER/Desktop/motorcycle_assist/YOLOv26_DEMO/visor_core.py) 統一封裝：
-* **V4L2 硬體層級防衝突擷取 ([`vision/frame_reader.py`](file:///C:/Users/USER/Desktop/motorcycle_assist/vision/frame_reader.py))**：透過 Linux `ioctl(VIDIOC_QUERYCAP)` 直接檢驗 `/dev/video*` 設備旗標，精準過濾 UVC Metadata 虛擬節點（`V4L2_CAP_META_CAPTURE`），並具備前後鏡頭同節點防衝突自動降級保護。
-* **台灣道路專用物件偵測 ([`YOLOv26_DEMO/engine_yolo26.py`](file:///C:/Users/USER/Desktop/motorcycle_assist/YOLOv26_DEMO/engine_yolo26.py))**：採用 `YOLOv26n-TW Titan` ONNX/PyTorch 模型，支援非正方形矩形推論（`imgsz: [288, 384]`，`rect: true`），大幅降低背景天空與無效邊緣的算力浪費。
-* **三模態可切換車道線引擎**：
-  * **CV-Magnet ([`engine_cv_lane.py`](file:///C:/Users/USER/Desktop/motorcycle_assist/YOLOv26_DEMO/engine_cv_lane.py))**：預設啟用之超輕量幾何地面吸附車道線演算法，單幀耗時僅 **0.4ms**，零深度學習額外負載。
-  * **LSTR ([`engine_lstr.py`](file:///C:/Users/USER/Desktop/motorcycle_assist/YOLOv26_DEMO/engine_lstr.py))**：基於 Transformer 與 CULane 曲線有理函數（Rational Function）之車道預測模型（僅 0.77M 參數），內建對數空間取樣（Logspace Y-Sampling）、EMA 平滑濾波與 15 幀慣性滑行（Inertia Coasting），於路口或斑馬線短暫無標線時仍能穩定維持車道邊界。
-  * **UFLD v2 ([`engine_ufld.py`](file:///C:/Users/USER/Desktop/motorcycle_assist/YOLOv26_DEMO/engine_ufld.py))**：支援 FP32/FP16 量化與 Skip-Frame 跳幀快取的高精度行錨點車道偵測。
+單目視覺測距中，邊界框寬度因光影產生 $\pm 2\text{ px}$ 微小抖動，在時間差分後會使接近速度 $v_{\text{rel}} = \Delta d / \Delta t$ 暴衝至 $45\text{ m/s}$ ($162\text{ km/h}$)，導致均速跟車時警報燈號在「綠 ↔ 黃 ↔ 紅」之間瘋狂跳色。[`spatial_fusion.py`](file:///C:/Users/USER/Desktop/motorcycle_assist/YOLOv26_DEMO/spatial_fusion.py) 透過獨創的**四階邊緣消抖引擎**徹底解決此問題（實測消除 **244 次**無效雜訊閃爍，穩定度提升 **31.5%**）：
 
-### 2. 空間幾何融合與 TTC 威脅分級 (`SpatialFusion v2`)
-位於 [`YOLOv26_DEMO/spatial_fusion.py`](file:///C:/Users/USER/Desktop/motorcycle_assist/YOLOv26_DEMO/spatial_fusion.py)，負責將 2D 邊界框與車道多邊形轉化為符合 ADAS 標準的防撞決策：
-* **分車種類別單目距離解算**：摒棄傳統固定車寬假設，依類別賦予真實物理寬度（`scooter: 0.7m`、`car: 1.8m`、`truck: 2.5m`、`bicycle: 0.6m`、`pedestrian: 0.5m`），並針對前後鏡頭不同焦距（前 `f=260`、後 `f=185`）與車尾邊緣偏移（`-3m` 修正）精確換算實質車距：
-  $$\text{Distance} = \frac{W_{\text{class}} \times f_{\text{camera}}}{W_{\text{bbox}}}$$
-* **Kalman EMA 無感測器相對速度追蹤**：透過跨幀目標中心點匹配與指數移動平均（$\alpha = 0.4$）計算逼近相對速度 $v_{\text{rel}} = \Delta d / \Delta t$，進一步求取碰撞時間 $\text{TTC} = d / v_{\text{rel}}$。
-* **四級威脅判定與側向防干擾門檻**：側向盲區（Left / Right）最高僅觸發視覺提醒（`CAUTION`），避免市區併行車流造成過度警報；正前方急煞與正後方逼車則依 TTC 與絕對距離上限（Distance Caps）分級：
+```mermaid
+flowchart LR
+    Input["🎯 YOLO26n 偵測框 + LSTR 車道線<br/>分車種真實車寬單目測距<br/>d = max(0, (W_real × f) / w_bbox - 3)"]
+    Stage1["① 行人分流 (Pedestrian Offload)<br/>路側非本車道行人跳過追蹤運算<br/>釋放 Pi 5 達 35% CPU 算力"]
+    Stage2["② 雙指數平滑 (Dual EMA Filter)<br/>D_t = 0.35 D_raw + 0.65 D_{t-1}<br/>Kalman EMA 平滑距離與差分速度"]
+    Stage3["③ 速率門檻過濾 (Velocity Gate)<br/>v_rel > 0.6 m/s 才判定為實質逼近<br/>均速跟車強制抑制紅燈誤報"]
+    Stage4["④ 鄰道隔離與施密特遲滯 (Hysteresis)<br/>鄰道車輛最高限黃燈 (CAUTION)<br/>降級具備 1.5m 空間緩衝 + 0.25s 冷卻"]
+    Output["🚨 穩定車載級三級預警輸出<br/>CRITICAL (<1.0s / <2m)<br/>WARNING (<1.5s / <4m)<br/>CAUTION (<2.5s / <8m)"]
 
-| 威脅等級 (Threat Level) | 碰撞時間門檻 (TTC) | 絕對距離上限 (Dist Cap) | 車道位置限制 (Lane Gating) | HUD 與系統行為 |
-| :--- | :---: | :---: | :---: | :--- |
-| 🔴 **`CRITICAL`** | `< 1.0 s` | `< 2.0 m` | 僅限本車道 (`IN_LANE`) / 正後方 | 緊急危險警報、HUD 全螢幕硬體反白閃爍 |
-| 🟠 **`WARNING`** | `< 1.5 s` | `< 4.0 m` | 僅限本車道 (`IN_LANE`) / 正後方 | 防撞預警提示、HUD 方向箭頭強化警示 |
-| 🟡 **`CAUTION`** | `< 2.5 s` | `< 8.0 m` | 本車道 / 鄰近車道盲區 (`BSD`) | 盲點注意提醒（純視覺標示，不觸發刺耳蜂鳴） |
-| 🟢 **`SAFE`** | `≥ 2.5 s` | `≥ 8.0 m` | 所有其他區域 | 常規狀態顯示 |
-
-### 3. 光學反射式抬頭顯示器 (V.I.S.O.R. HUD)
-位於 [`hud/hud_client.py`](file:///C:/Users/USER/Desktop/motorcycle_assist/hud/hud_client.py)，運行於 Raspberry Pi Zero 2W：
-* **光學分光鏡座標轉換 (`HudCanvas`)**：支援透過設定檔或 App 即時切換水平鏡像（`mirror`）與垂直翻轉（`flip_v`），確保影像投射至安全帽反射片時文字方向完全正立。
-* **三執行緒零積壓架構**：
-  1. **Network Thread**：非阻塞式清空 UDP Socket 緩衝區，永遠只保留最新一幀封包，徹底消除網路延遲累積。
-  2. **Render Thread**：穩定維持 20 FPS 畫面刷新，顯示時速、時間、導航方向、測速照相距離、四向威脅箭頭（`/\`, `\/`, `<`, `>`），並在 `danger` 狀態下以 `0.35s` 週期觸發 OLED 硬體級別反白閃爍（Hardware Invert Flash）。
-  3. **Heartbeat Thread**：每 2 秒主動向 `pi5.local`、`192.168.4.1` 與 `255.255.255.255` 發送多路心跳封包（Port `5006`），讓 Pi 5 自動鎖定 HUD 真實 IP 並切換為高速單播（Unicast）。
-
-### 4. 雙通道零延遲容錯通訊架構 (Dual-Channel Comm)
-位於 [`communication/`](file:///C:/Users/USER/Desktop/motorcycle_assist/communication) 與 [`visor_bt_agent.py`](file:///C:/Users/USER/Desktop/motorcycle_assist/visor_bt_agent.py)：
-* **WebSocket 高速通道 ([`websocket_server.py`](file:///C:/Users/USER/Desktop/motorcycle_assist/communication/websocket_server.py))**：監聽 Port `8765`，支援 `SO_REUSEADDR` / `SO_REUSEPORT` 快速重啟，負責傳送高頻遙測數據與雙鏡頭即時壓縮影像串流。
-* **原生藍牙 RFCOMM 抗斷訊伺服器 ([`bluetooth_server.py`](file:///C:/Users/USER/Desktop/motorcycle_assist/communication/bluetooth_server.py))**：
-  * **指令佇列化工作執行緒 (`_command_worker`)**：以單一常駐佇列處理手機端 4Hz `telemetry_sync` 指令，徹底解決傳統架構每指令衍生新執行緒導致的 Linux 核心資源耗盡問題。
-  * **原子化分塊與防堵塞看門狗**：以 512 Bytes 分塊平滑寫入 RFCOMM Socket，具備自動補齊換行符與連續逾時自我重連機制，根除藍牙 JSON 黏包（Sticky Packets）。
-* **免螢幕藍牙自動配對代理人 ([`visor_bt_agent.py`](file:///C:/Users/USER/Desktop/motorcycle_assist/visor_bt_agent.py))**：透過 `org.bluez.Agent1` 註冊 `NoInputNoOutput` 代理，新手機連線時自動確認配對碼並寫入 `Trusted` 白名單，實現真正的車載無頭（Headless）隨連即用。
-
-### 5. 哨兵模式、車載黑盒子與 E-SOS 緊急救援
-* **哨兵循環錄影 ([`vision/recorder.py`](file:///C:/Users/USER/Desktop/motorcycle_assist/vision/recorder.py))**：平時於記憶體維護環形緩衝區（Circular Buffer），當偵測到異常震動、傾角超標或緊急威脅時，自動將事件前後關鍵影像封裝寫入 `events/` 與 `recordings/`。
-* **非同步車載黑盒子 ([`trip_logger.py`](file:///C:/Users/USER/Desktop/motorcycle_assist/trip_logger.py))**：採用 `Queue + Daemon Worker Thread` 架構，主迴圈寫入耗時 **0ms**（CPU 佔用率 `<0.1%`），自動統計單趟行程之最高/平均車速、FCW/BSD 觸發次數、最小逼近距離與各車種感知分佈，並支援自動產出結構化路測報告。
-
-### 6. 戰術行動端應用程式 (Tactical Mobile App)
-位於 [`www/`](file:///C:/Users/USER/Desktop/motorcycle_assist/www)，基於 **React + TailwindCSS + Recharts + Leaflet + Apache Cordova** 構建：
-* **即時戰術儀表板**：整合前後雙鏡頭即時串流預覽、雷達威脅方位視覺化、車速與車身傾角儀表。
-* **全台測速照相預警 ([`www/lib/js/GeoUtils.js`](file:///C:/Users/USER/Desktop/motorcycle_assist/www/lib/js/GeoUtils.js))**：內建離線全台測速照相座標資料庫（[`speed_cameras.json`](file:///C:/Users/USER/Desktop/motorcycle_assist/www/lib/data/speed_cameras.json)），即時解算騎士與前方測速點距離並同步推播至安全帽 HUD。
-* **硬體遠端控制與調光優化**：提供 HUD 顯示項目開關、OLED 亮度滑桿（採用 `onMouseUp`/`onTouchEnd` 放手發送機制避免封包風暴），以及 Pi 5 / Pi Zero 2W 雙裝置遠端安全關機按鈕。
-* **雲端騎乘大數據分析**：整合 **Supabase** 雲端同步，自動彙整歷史騎乘紀錄、超速、急煞與大傾角事件圖表。
+    Input --> Stage1 --> Stage2 --> Stage3 --> Stage4 --> Output
+```
 
 ---
 
-## 📊 AI 模型效能基準與實驗數據
+## 🔬 三、核心技術與創新貢獻詳解 (Core Technologies & Contributions)
 
-以下數據摘錄自本專案完整實驗報告（詳見 [`YOLOv26_DEMO/BENCHMARK_REPORT.md`](file:///C:/Users/USER/Desktop/motorcycle_assist/YOLOv26_DEMO/BENCHMARK_REPORT.md)）：
+### 1. 次世代 `YOLO26n-TW` 與全管線 4:3 原生幾何推論 ([`YOLOv26_DEMO/`](file:///C:/Users/USER/Desktop/motorcycle_assist/YOLOv26_DEMO))
+* **極致輕量化骨幹**：參數量僅 **2.37M**（比 YOLOv8n 減少 26%）、計算量僅 **5.3 GFLOPs**，專為無獨立 GPU 的樹莓派 Pi 5 純 CPU 環境設計。
+* **全管線 4:3 原生矩形推論 (`384×288`, `rect=True`)**：傳統 YOLO 預設 `640×640` 正方形推論會填入 25% 無效黑邊（Letterbox）。本系統從相機擷取（`640×480`）到推論（`384×288`）全面採用 4:3 原生比例，**像素運算量直降 64.0%**，同时遠端小目標（15–30m 處 `<24×24 px` 的機車）有效特徵像素密度提升 **33.3%**。
+* **多源融合資料工程 (16,275 張影像 / 185,049 個標註)**：融合 BDD100K 惡劣天候子集（8,461 張）、台灣本土混合車流 Taiwan Traffic v2.0（2,078 張）、機車後視鏡盲區資料集（1,560 張）與空曠道路純負樣本（468 張），並人工校準盲區資料集中 **845 處將大型重機誤標為汽車之缺陷**，使機車類別 `mAP@50` 由 `30.2%` 翻倍躍升至 **`61.1%` (+102.3%)**，汽車精確率達 **`72.4%`**。
 
-### 物件偵測模型比較 (Object Detection Benchmark)
+### 2. 輕量幾何與 Transformer 車道線感知 ([`engine_cv_lane.py`](file:///C:/Users/USER/Desktop/motorcycle_assist/YOLOv26_DEMO/engine_cv_lane.py) / [`engine_lstr.py`](file:///C:/Users/USER/Desktop/motorcycle_assist/YOLOv26_DEMO/engine_lstr.py))
+* **LSTR 輕量車道曲線模型**：僅 `765K` 參數（`3.1 MB`），以有理函數 $x = \frac{c_0}{(y-c_1)^2} + \frac{c_2}{y-c_1} + c_3 + c_4 y - c_5$ 直接擬合彎道，配合跨 2 幀排程（Skip-2）均攤耗時僅 **11.6 ms/幀**（比 UFLD v2 快 **4.7 倍**），並採用 50 點對數空間 Y 軸取樣（近密遠疏）與 15 幀慣性滑行（Inertia Coasting）。
+* **CV-Magnet 極速地面幾何引擎**：針對極限高幀率模式提供 **0.4 ms** 原生 OpenCV 地面吸附車道線推算，零深度學習負載。
 
-| 模型版本 (Model Variant) | 輸入解析度 | Precision | Recall | F1-Score | mAP@50 | 參數量 | 模型大小 | 推論速度 (Pi 5 預估 / 實測) |
-| :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
-| **YOLOv8n (Base)** | 640 px | 0.421 | 0.285 | 0.340 | 0.298 | 3.2 M | 6.20 MB | 5–8 FPS (>150ms) |
-| **YOLOv8n (Optimized)** | 320 px | 0.543 | 0.326 | 0.407 | 0.336 | 3.2 M | 6.20 MB | 15–20 FPS (<60ms) |
-| **YOLOv26n (COCO Pretrained)** | 320 px | 0.561 | 0.338 | 0.422 | 0.349 | 2.6 M | 5.30 MB | 20–25 FPS (<45ms) |
-| **YOLOv26n-TW Titan ★ (本研究微調)** | 288×384 (rect) | **0.733** | **0.610** | **0.666** | **0.663** | **2.6 M** | **5.16 MB** | **~20 FPS (Ping-Pong 雙鏡穩定)** |
+### 3. 車載級動態威脅分級與空間象限切分 ([`spatial_fusion.py`](file:///C:/Users/USER/Desktop/motorcycle_assist/YOLOv26_DEMO/spatial_fusion.py))
+依據各車種真實物理寬度（`scooter: 0.7m`、`car: 1.8m`、`truck: 2.5m`、`bicycle: 0.6m`、`pedestrian: 0.5m`）與車尾邊緣偏移修正（`-3m`）計算單目距離與碰撞時間（TTC），並實施嚴格的車道與遲滯門檻：
 
-### 車道線與完整感知管線延遲比較 (Full Pipeline Comparison)
+| 警報等級 (Alert Level) | 觸發條件 (TTC / 絕對距離上限) | 車道位置限制 (Lane Gating) | 遲滯與硬體預警機制 (Hysteresis & HMI Action) |
+| :--- | :---: | :---: | :--- |
+| 🔴 **緊急 (`CRITICAL`)** | `TTC < 1.0 s` 或 `距離 < 2.0 m` | 僅限本車道 (`IN_LANE`) / 正後方 | 連續 2 幀確認升級 + **HUD 全螢幕硬體反白閃爍** + 雙頻急促蜂鳴 |
+| 🟠 **警示 (`WARNING`)** | `TTC < 1.5 s` 或 `距離 < 4.0 m` | 僅限本車道 (`IN_LANE`) / 正後方 | 施密特 `1.5m` 緩衝降級 + `0.25s` 冷卻 + HUD 方向箭頭強化 + 單頻蜂鳴 |
+| 🟡 **注意 (`CAUTION`)** | `TTC < 2.5 s` 或 `距離 < 8.0 m` | 本車道 / 左右鄰道盲區 (`BSD`) | **鄰道車輛最高限此級（純視覺提示、絕不蜂鳴）**，徹底杜絕市區併行吵雜 |
+| 🟢 **安全 (`SAFE`)** | `TTC ≥ 2.5 s` 且 `距離 ≥ 8.0 m` | 所有其他區域 | 常規狀態顯示 |
 
-| 車道線引擎配置 | 執行後端 | 參數規模 | 測距與威脅邏輯 | 單幀延遲 (Desktop CPU) | 整體 FPS (Desktop / Pi 5) |
-| :--- | :---: | :---: | :--- | :---: | :---: |
-| **UFLD v2 (FP32)** | ONNX Runtime | 12.0 M | 固定車寬 1.8m | 262 ms | 3.8 FPS / ~1.3 FPS |
-| **UFLD v2 (FP16 + Skip-2)** | ONNX Runtime | 12.0 M | 固定車寬 1.8m | 147 ms | 6.8 FPS / ~2.3 FPS |
-| **LSTR CULane (Edge Skip-2)** | TorchScript | **0.77 M** | **分車種寬度 + TTC + Kalman EMA** | **29 ms** | **34.7 FPS / ~10.8 FPS** |
-| **CV-Magnet (Ground-Snapping) ★** | Native OpenCV | **0 M** | **分車種寬度 + TTC + Kalman EMA** | **~19.4 ms** | **50+ FPS / ~20 FPS** |
+### 4. 安全帽光學 HUD 與雙通道零延遲容錯通訊 ([`hud/`](file:///C:/Users/USER/Desktop/motorcycle_assist/hud) & [`communication/`](file:///C:/Users/USER/Desktop/motorcycle_assist/communication))
+* **光學分光鏡座標轉換 ([`hud/hud_client.py`](file:///C:/Users/USER/Desktop/motorcycle_assist/hud/hud_client.py))**：內建 `HudCanvas` 支援水平鏡像（`mirror=True`）與垂直翻轉（`flip_v`），確保投射至安全帽反射鏡片時文字方向完全正立；具備多路單播/廣播自動探測心跳（主動向 `pi5.local`、`192.168.4.1`、`255.255.255.255` 發送 Port `5006` 心跳），不論在車載 AP 熱點、公共 Wi-Fi 或實體網路線下皆能秒連。
+* **零執行緒洩漏藍牙 RFCOMM 伺服器 ([`bluetooth_server.py`](file:///C:/Users/USER/Desktop/motorcycle_assist/communication/bluetooth_server.py))**：採用單一常駐 `_command_worker` 佇列處理手機端 4Hz 遙測同步，徹底根除過去每指令建立 OS 執行緒導致運行 10 分鐘產生 2,400+ 執行緒耗盡 Linux 核心資源之問題；搭配 **512-byte 原子化分塊寫入**與看門狗重連，完全杜絕 JSON 黏包。
+* **免螢幕 D-Bus 藍牙自動配對代理人 ([`visor_bt_agent.py`](file:///C:/Users/USER/Desktop/motorcycle_assist/visor_bt_agent.py))**：註冊 `NoInputNoOutput` BlueZ Agent，新手機點選配對即自動確認並加入 `Trusted` 白名單。
 
 ---
 
-## 🛠️ 硬體規格與接線配置
+## 📊 四、實驗驗證與效能基準 (Experimental Benchmarks)
+
+### 4.1 物件偵測模型實測對比 (Object Detection Comparison)
+
+| 模型版本 (Model Variant) | 汽車精確率 (Car Prec.) | 機車 mAP@50 (Scooter) | 全類別 mAP@50 (All) | 參數量 (Params) | 計算量 (GFLOPs) | Pi 5 純 CPU 單幀延遲 |
+| :--- | :---: | :---: | :---: | :---: | :---: | :---: |
+| **YOLOv5s (Baseline)** | 25.7% | 30.2% | 0.185 | 7.20 M | 16.5 | > 150 ms (5–6 FPS) |
+| **YOLOv8n (Optimized)** | 54.3% | 33.6% | 0.336 | 3.20 M | 8.7 | < 60 ms (15–20 FPS) |
+| **V.I.S.O.R. (YOLO26n-TW) ★** | **72.4%** *(+210%)* | **61.1%** *(+102%)* | **0.484** *(+256%)* | **2.37 M** *(-26%)* | **5.3** *(-64%)* | **26 – 41 ms (24–39 FPS)** |
+
+### 4.2 車道線模型與單幀 41.0 ms 全管線延遲分解 (Latency Breakdown)
+
+| 管線階段 / 模組 (Pipeline Stage) | 採用技術 / 模型規格 | 單幀平均耗時 (Pi 5 Edge CPU) | 佔比 (Share) |
+| :--- | :--- | :---: | :---: |
+| **1. 物件偵測 (Object Detection)** | `YOLO26n-TW` (`384×288` 4:3 原生矩形推論) | **22.1 ms** | 53.9% |
+| **2. 車道線感知 (Lane Detection)** | `LSTR-CULane` (`765K` 參數, Skip-2 均攤) / `CV-Magnet` (`0.4ms`) | **11.6 ms** | 28.3% |
+| **3. 空間融合與四階消抖 (Spatial Fusion)** | `SpatialFusion v2` (單目測距 + Dual EMA + 施密特遲滯) | **4.1 ms** | 10.0% |
+| **4. 遙測封裝與 HUD 推播 (HUD & Comm)** | 非同步 UDP 廣播 (`<128B`) + WebSocket / RFCOMM 佇列 | **3.2 ms** | 7.8% |
+| **⚡ 端到端全管線總計 (Total End-to-End)** | **純 CPU 邊緣運算（零外接 GPU / 零雲端延遲）** | **41.0 ms (~24.4 FPS)** | **100%** |
+
+---
+
+# 🇺🇸 English Documentation (V.I.S.O.R.)
+
+## 📌 1. Executive Summary & Motivation
+
+**V.I.S.O.R. (Visual Intelligent Safety on Road)** is a distributed, edge-AI active safety and Advanced Rider Assistance System (ARAS) purpose-built for motorcycles operating in high-density mixed traffic.
+
+In Taiwan, where registered motorcycles exceed 14.4 million, two-wheeler riders represent the most critical group of **Vulnerable Road Users (VRUs)**—accounting for **61.74%** of all traffic casualties and facing a fatality rate **28× higher** than passenger cars due to the absence of structural crumple zones. While modern passenger vehicles benefit from Level 2/3 ADAS powered by expensive LiDARs, millimeter-wave radars, and high-wattage GPUs, motorcycles have been left behind due to strict cost, size, and power constraints.
+
+**V.I.S.O.R.** bridges this safety gap by championing **Traffic Equity (*"Active safety should not be a luxury reserved for cars"*):**
+1. **280° Panoramic Pure-Vision Shield**: Combines a front 120° wide-angle camera and a rear 173° ultra-wide Sony IMX662 STARVIS 2 night-vision camera on a sub-$100 **Raspberry Pi 5** CPU node (`<15W` total power, directly driven by a 12V motorcycle battery).
+2. **Native 4:3 Rectangular Edge AI (`YOLO26n-TW`)**: Eliminates the 25% black letterbox padding of standard `640×640` YOLO pipelines by running end-to-end 4:3 native geometry (`384×288`), cutting compute by **64.0%** while boosting small-object pixel density by **33.3%**.
+3. **4-Stage Sentinel De-Jitter Engine (`SpatialFusion v2`)**: Resolves monocular bounding-box jitter ($\pm 2\text{ px}$ noise causing $162\text{ km/h}$ false velocity spikes) via Pedestrian Offloading, Dual Exponential Moving Average (EMA), a $0.6\text{ m/s}$ Velocity Gate, and Schmitt-Trigger Hysteresis—eliminating **244 false flicker alerts (+31.5% stability)**.
+4. **Decoupled Helmet Optical HUD & Tactical Mobile App**: Streams `<128B` UDP telemetry packets (`<1.2ms` latency) at 20Hz to a **Raspberry Pi Zero 2W** driving a `128×64` I2C OLED optical combiner inside the helmet, paired with a dual-channel (**Wi-Fi WebSocket + Bluetooth RFCOMM**) **React/Cordova Tactical Mobile App** and **Supabase** cloud analytics.
+
+---
+
+## 🧠 2. Key Technical Innovations (English Summary)
+
+* **Multi-Source Dataset Engineering (16,275 Images / 185,049 Annotations)**:
+  Trained on a unified corpus combining BDD100K adverse-weather scenes (8,461 images), Taiwan Traffic v2.0 urban scooter waterfalls (2,078 images), Rear-View Mirror Blind-Spot datasets (1,560 images), and hard background negatives (468 images). By Auditing and rectifying **845 mislabeled large scooter bounding boxes**, scooter `mAP@50` doubled from `30.2%` to **`61.1%` (+102.3%)** and car precision reached **`72.4%`**.
+* **Asymmetric Ping-Pong AI Scheduler ([`main_controller.py`](file:///C:/Users/USER/Desktop/motorcycle_assist/main_controller.py))**:
+  Alternates front ADAS (Object + Lane + FCW) and rear BSD inference at a steady 20Hz loop, automatically locking onto rear high-priority defense whenever consecutive rear danger streaks are detected.
+* **Zero-Thread-Leak Bluetooth RFCOMM & Headless Auto-Pairing ([`communication/bluetooth_server.py`](file:///C:/Users/USER/Desktop/motorcycle_assist/communication/bluetooth_server.py))**:
+  Replaces per-command thread spawning with a dedicated `_command_worker` queue, 512-byte atomic packet chunking, and a BlueZ D-Bus `NoInputNoOutput` auto-pairing agent ([`visor_bt_agent.py`](file:///C:/Users/USER/Desktop/motorcycle_assist/visor_bt_agent.py)).
+* **Zero-Overhead Blackbox Logger & Sentry Dashcam ([`trip_logger.py`](file:///C:/Users/USER/Desktop/motorcycle_assist/trip_logger.py), [`vision/recorder.py`](file:///C:/Users/USER/Desktop/motorcycle_assist/vision/recorder.py))**:
+  Logs speed, tilt angle, GPS coordinates, FCW/BSD events, and per-class perception counts to CSV in `0ms` main-loop time (`<0.1%` CPU), while maintaining a circular video buffer for shock/tilt-triggered Sentry recordings and E-SOS emergency SMS dispatch.
+
+---
+
+## 🛠️ 硬體規格與接線配置 (Hardware Specifications & Pinout)
 
 ### 1. 硬體清單 (Bill of Materials)
-* **車載主機 (V.I.S.O.R. Core)**：Raspberry Pi 5 (8GB LPDDR4X, Cortex-A76 四核心 @ 2.4GHz)
-* **影像感測器 (Dual Cameras)**：Sony IMX662 STARVIS 2 夜視星光級雙鏡頭模組（USB 2.0 UVC / MIPI-CSI）
-  * **前鏡頭 (Front ADAS)**：120° 廣角、等效焦距 `f=260`
-  * **後鏡頭 (Rear BSD)**：173° 超廣角、等效焦距 `f=185`
-* **抬頭顯示器 (V.I.S.O.R. HUD)**：Raspberry Pi Zero 2W + 1.3 吋 / 0.96 吋 I2C OLED 顯示模組（`SSD1306` 或 `SH1106` 驅動晶片，解析度 `128×64`）
-* **行動終端 (Mobile App)**：Android 智慧型手機（支援 Bluetooth SPP 與 Wi-Fi）
 
-### 2. Pi Zero 2W 與 I2C OLED 接線表 (Pinout)
+| 節點 / 模組 (Component) | 硬體型號與規格 (Specification) | 角色與職責 (Role) |
+| :--- | :--- | :--- |
+| **V.I.S.O.R. Core (車載主機)** | Raspberry Pi 5 (Cortex-A76 四核心 @ 2.4GHz, 8GB LPDDR4X) | 雙鏡頭擷取、YOLO26n + LSTR 推論、哨兵錄影、通訊伺服器 |
+| **前向鏡頭 (Front Camera)** | Sony IMX662 STARVIS 2 (USB 2.0 UVC / MIPI-CSI, **FOV 120°**, `f=260`) | 前方防撞預警 (FCW)、車道線擬合、前方車距解算 |
+| **後向鏡頭 (Rear Camera)** | Sony IMX662 STARVIS 2 (USB 2.0 UVC / MIPI-CSI, **FOV 173°**, `f=185`) | 後方盲區偵測 (BSD)、後方高速逼近防追撞預警 |
+| **V.I.S.O.R. HUD (安全帽顯示端)** | Raspberry Pi Zero 2W + 1.3" / 0.96" I2C OLED (`SSD1306` / `SH1106`, `128×64`) | 安全帽光學鏡像抬頭顯示、硬體反白閃爍警示 |
+| **V.I.S.O.R. Mobile (行動終端)** | Android 智慧型手機 (Cordova APK / WebSocket / Bluetooth SPP) | 雙鏡即時預覽、全台測速照相預警、E-SOS 求救、Supabase 分析 |
 
-| OLED 模組腳位 | Raspberry Pi Zero 2W 腳位 | GPIO 編號 | 說明 |
+### 2. Pi Zero 2W 與 I2C OLED 接線對照表 (I2C OLED Wiring Pinout)
+
+| OLED 顯示模組腳位 | Raspberry Pi Zero 2W 實體腳位 | GPIO 編號 | 功能說明 (Description) |
 | :---: | :---: | :---: | :--- |
-| **VCC / VDD** | Pin 1 | 3.3V Power | 3.3V 電源供應 |
-| **GND** | Pin 6 | Ground | 共通接地 |
-| **SCL / SCK** | Pin 5 | GPIO 3 (SCL1) | I2C 時脈訊號線 |
-| **SDA** | Pin 3 | GPIO 2 (SDA1) | I2C 資料訊號線 (`預設位址 0x3C`) |
+| **VCC / VDD** | Pin 1 | `3.3V Power` | 3.3V 直流電源供應 |
+| **GND** | Pin 6 | `Ground` | 共通接地 |
+| **SCL / SCK** | Pin 5 | `GPIO 3 (SCL1)` | I2C 時脈訊號線 (Clock) |
+| **SDA** | Pin 3 | `GPIO 2 (SDA1)` | I2C 資料訊號線 (Data, 預設位址 `0x3C`) |
 
 ---
 
-## 📂 專案目錄結構
+## 📂 專案目錄結構 (Project Directory Structure)
 
 ```text
 motorcycle_assist/
-├── main_controller.py          # V.I.S.O.R. Core 車載主控制器 (整合雙鏡頭、AI 排程、通訊與錄影)
+├── main_controller.py          # V.I.S.O.R. Core 車載主控制器 (雙鏡頭排程、AI 推論、多協定通訊與錄影)
 ├── main.py                     # 獨立視覺展示與快速測試入口
-├── config.json                 # 系統全域參數配置檔 (網路埠號、相機參數、距離閾值、HUD 設定)
+├── config.json                 # 系統全域參數配置檔 (網路埠號、雙鏡頭焦距/FOV、距離門檻、HUD 設定)
 ├── config_loader.py            # 設定檔非同步載入與持久化儲存工具
-├── trip_logger.py              # 非同步雙緩衝車載黑盒子路測記錄器 (0ms 阻塞、CSV 匯出)
-├── visor_bt_agent.py           # BlueZ D-Bus 免螢幕藍牙自動配對與信任代理人
+├── trip_logger.py              # 非同步雙緩衝車載黑盒子路測記錄器 (0ms 阻塞、CSV 統計匯出)
+├── visor_bt_agent.py           # BlueZ D-Bus 免螢幕藍牙自動配對與白名單信任代理人
 ├── requirements.txt            # Python 核心套件依賴清單
 ├── package.json                # Node.js / esbuild 與 Apache Cordova 專案設定
-├── config.xml                  # Apache Cordova Android App 打包組態檔
+├── config.xml                  # Apache Cordova Android App 封裝組態檔
 │
 ├── YOLOv26_DEMO/               # 邊緣視覺感知核心模組 (VisorCore Pipeline)
 │   ├── visor_core.py           # 前後雙鏡頭 AI 推論與四向威脅轉換封裝介面
-│   ├── engine_yolo26.py        # YOLOv26n-TW 台灣道路物件偵測引擎
+│   ├── engine_yolo26.py        # YOLO26n-TW 台灣道路 5 類別物件偵測引擎 (支援 4:3 矩形推論)
 │   ├── engine_cv_lane.py       # CV-Magnet 0.4ms 極速地面幾何車道線引擎
 │   ├── engine_lstr.py          # LSTR Transformer 車道曲線預測引擎 (含 TorchScript 與慣性滑行)
 │   ├── engine_ufld.py          # UFLD v2 ONNX 車道線偵測引擎
-│   ├── spatial_fusion.py       # SpatialFusion v2 單目測距、Kalman EMA 相對速度與 TTC 威脅引擎
+│   ├── spatial_fusion.py       # SpatialFusion v2 單目測距、四階邊緣消抖引擎與 TTC 威脅決策
 │   ├── visualizer_hud.py       # 視覺化戰術 HUD 疊加渲染器
 │   ├── main_demo.py            # 多模型命令列基準測試與展示工具
-│   └── BENCHMARK_REPORT.md     # 完整模型精準度、延遲與極端氣候實驗報告
+│   └── BENCHMARK_REPORT.md     # 完整模型精準度、延遲與極端天候實驗報告
 │
 ├── vision/                     # 硬體相機擷取與哨兵錄影模組
-│   ├── frame_reader.py         # V4L2 節點過濾、USB/CSI 自動探測與非同步影像讀取器
+│   ├── frame_reader.py         # V4L2 VIDIOC_QUERYCAP 節點過濾、USB/CSI 自動探測與防衝突讀取器
 │   ├── recorder.py             # 環形緩衝區行車紀錄與碰撞/傾倒事件觸發錄影器
 │   ├── detector.py             # 基礎 YOLO 偵測器介面
 │   ├── tracker.py              # 多目標追蹤輔助模組
 │   ├── fusion.py               # 基礎幾何距離融合計算
 │   └── sensor_sim.py           # 展覽與開發模式虛擬感測器模擬器 (車速、傾角、G 值)
 │
-├── communication/              # 跨節點雙向通訊協定層
+├── communication/              # 跨節點雙向容錯通訊協定層
 │   ├── websocket_server.py     # 高速非同步 WebSocket 伺服器 (Port 8765)
 │   ├── bluetooth_server.py     # 原生 RFCOMM 藍牙伺服器 (單一佇列執行緒 + 512B 分塊防黏包)
 │   ├── udp_broadcaster.py      # 20Hz 恆定背景執行緒 UDP 廣播/單播發射器 (Port 5005)
 │   └── udp_listener.py         # HUD 心跳與狀態回報監聽器 (Port 5006)
 │
-├── hud/                        # 安全帽抬頭顯示器模組 (Pi Zero 2W)
+├── hud/                        # 安全帽光學抬頭顯示器模組 (Pi Zero 2W)
 │   └── hud_client.py           # I2C OLED (SSD1306/SH1106) 渲染引擎、光學翻轉與多路心跳客戶端
 │
 ├── www/                        # 戰術行動端應用程式前端 (React + TailwindCSS + Cordova)
 │   ├── index.html              # App 主入口頁面 (整合儀表板、雙鏡串流、雲端分析、HUD 控制)
 │   ├── build.mjs               # esbuild 前端快速打包腳本
+│   ├── img/                    # V.I.S.O.R. 品牌標誌與視覺識別資源
 │   ├── js/                     # React 組件原始碼 (app.jsx) 與打包產物
 │   └── lib/                    # 離線前端庫與全台測速照相資料庫 (GeoUtils.js, speed_cameras.json)
+│
+├── presentation/               # 專題發表動態展示媒體庫
+│   ├── gif/                    # 實車道路實測 GIF (市區/快速道路/穿梭/盲區) 與架構動畫
+│   └── img/                    # 行動端 App 實機介面截圖與標誌
 │
 ├── scripts/                    # 自動化部署、硬體診斷與 Systemd 系統服務腳本
 │   ├── visor-core.service      # Pi 5 開機自動啟動 Systemd 服務單元
@@ -269,8 +374,8 @@ motorcycle_assist/
 │   ├── setup_bt.sh             # 藍牙 SPP 服務與權限初始化腳本
 │   └── diag_*.py               # 雙 USB / 雙 CSI 相機與 OLED 硬體檢測工具
 │
-├── tools/                      # 開發輔助與模型匯出工具
-│   ├── build_visor_titan.py    # YOLOv26n-TW Titan 模型訓練與 ONNX 匯出工具
+├── tools/                      # 開發輔助與模型訓練匯出工具
+│   ├── build_visor_titan.py    # YOLO26n-TW Titan 模型訓練與 ONNX 匯出工具
 │   ├── hud_simulator.py        # 電腦端 HUD 封包接收模擬器
 │   └── test_clients.py         # WebSocket / UDP 通訊壓力測試客戶端
 │
@@ -286,27 +391,27 @@ motorcycle_assist/
 
 ---
 
-## 🚀 安裝與快速啟動指南
+## 🚀 快速啟動與部署指南 (Quick Start & Deployment)
 
-### 1. 車載核心端設定 (Raspberry Pi 5 — V.I.S.O.R. Core)
+### 1. 車載運算中樞啟動 (Raspberry Pi 5 — V.I.S.O.R. Core)
 
 ```bash
-# 1. 複製專案儲存庫
+# 1. 複製專案儲存庫 (Clone Repository)
 git clone https://github.com/joe10897/Visor.git motorcycle_assist
 cd motorcycle_assist
 
-# 2. 安裝系統層級相依套件 (藍牙、V4L2 與 OpenCV 依賴)
+# 2. 安裝 Linux 系統層級相依套件 (BlueZ 藍牙、V4L2 相機工具與 OpenCV 依賴)
 sudo apt-get update
 sudo apt-get install -y python3-venv python3-pip python3-dbus python3-gi \
                         bluez bluez-tools v4l-utils libgl1
 
-# 3. 建立虛擬環境並安裝 Python 套件
+# 3. 建立虛擬環境並安裝 Python 依賴套件
 python3 -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
 pip install psutil onnxruntime
 
-# 4. 啟動 V.I.S.O.R. 主控制器
+# 4. 啟動 V.I.S.O.R. 主控制器 (請確保模型權重置於 models/ 目錄下)
 # 實車模式 (自動掛載前後雙鏡頭、WebSocket、藍牙與 UDP 廣播)
 python main_controller.py
 
@@ -317,95 +422,55 @@ python main_controller.py --demo
 python main_controller.py --exhibition
 ```
 
-### 2. 抬頭顯示器端設定 (Raspberry Pi Zero 2W — V.I.S.O.R. HUD)
+### 2. 安全帽抬頭顯示器啟動 (Raspberry Pi Zero 2W — V.I.S.O.R. HUD)
 
 ```bash
-# 1. 啟用 Raspberry Pi I2C 介面
+# 1. 啟用 Raspberry Pi I2C 硬體介面
 sudo raspi-config nonint do_i2c 0
 
-# 2. 安裝 OLED 驅動與繪圖函式庫
+# 2. 安裝 OLED 驅動與影像繪圖套件
 sudo apt-get update
 sudo apt-get install -y python3-pip python3-pil python3-smbus i2c-tools
 pip3 install luma.oled
 
-# 3. 確認 I2C OLED 位址 (預設為 0x3c)
+# 3. 驗證 I2C OLED 硬體位址 (預設應顯示 0x3c)
 sudo i2cdetect -y 1
 
-# 4. 啟動 HUD 客戶端 (預設開啟水平鏡像以配合安全帽反射片)
+# 4. 啟動 HUD 客戶端 (預設開啟水平鏡像以配合安全帽光學反射片)
 python3 hud/hud_client.py --model SSD1306
 ```
 
-### 3. 行動端 App 建置與封裝 (Android APK / Web)
+### 3. 戰術行動端 App 打包與預覽 (Mobile App Build)
 
 ```bash
 # 1. 安裝前端與 Cordova 依賴
 npm install
 
-# 2. 編譯前端 JSX 資源
+# 2. 使用 esbuild 編譯前端 JSX 資源
 npm run build
 
-# 3. 打包 Android APK (需具備 Android SDK 與 Java 17 環境)
+# 3. 封裝 Android APK (需配置 Android SDK 與 JDK 17)
 npx cordova build android
 ```
-> 💡 **快速預覽**：開發階段亦可直接以瀏覽器開啟 [`www/index.html`](file:///C:/Users/USER/Desktop/motorcycle_assist/www/index.html)，在介面中輸入 Pi 5 IP（預設熱點為 `192.168.4.1`）即可透過 WebSocket 即時連線。
 
----
+### 4. 自動化測試與硬體診斷 (Testing & Diagnostics)
 
-## ⚙️ 系統參數配置說明 (`config.json`)
-
-系統所有執行期參數皆集中管理於 [`config.json`](file:///C:/Users/USER/Desktop/motorcycle_assist/config.json)，並支援透過手機 App 遠端即時熱更新：
-
-| 分類區段 | 參數名稱 | 預設值 | 功能說明 |
-| :--- | :--- | :---: | :--- |
-| **`network`** | `broadcast_ip` | `"255.255.255.255"` | UDP 通用廣播位址（收到 HUD 心跳後自動加入單播目標） |
-| | `udp_port` | `5005` | Pi 5 發送至 Pi Zero HUD 之遙測數據埠號 |
-| | `hud_listener_port` | `5006` | Pi 5 監聽來自 Pi Zero HUD 心跳回報之埠號 |
-| | `websocket_port` | `8765` | 行動端 App WebSocket 雙向連線埠號 |
-| **`vision`** | `source_front` / `rear` | `"/dev/video0"` / `"2"` | 前後鏡頭 V4L2 裝置節點（支援自動探測回退） |
-| | `fov_front` / `fov_rear` | `120` / `173` | 前後鏡頭水平視角（度），用於空間盲區象限切分 |
-| | `focal_length_front` / `rear` | `260` / `185` | 前後鏡頭單目測距像素焦距常數 |
-| | `model_path` | `"models/yolo26n_tw_titan.onnx"` | 主力邊緣推論模型權重路徑 |
-| | `lane_model` | `"cv_magnet"` | 車道線引擎選擇（`"cv_magnet"` / `"lstr"` / `"ufld"`） |
-| | `imgsz` | `[288, 384]` | 模型推論輸入解析度（支援矩形加速） |
-| **`thresholds`** | `danger_dist` | `10.0` | 緊急危險警報觸發距離門檻（公尺） |
-| | `warning_dist` | `25.0` | 防撞注意預警觸發距離門檻（公尺） |
-| | `tilt_alert` | `18.0` | 車身異常傾倒 / E-SOS 觸發角度門檻（度） |
-| **`hud_config`** | `mirror` / `flip_v` | `true` / `false` | 安全帽光學反射鏡像與垂直翻轉開關 |
-| | `brightness` | `128` | OLED 螢幕對比亮度（`0–255`，支援 App 遠端無段調光） |
-| | `oled_model` | `"SSD1306"` | OLED 驅動晶片型號（支援 `"SSD1306"` 與 `"SH1106"`） |
-
----
-
-## 🧪 自動化部署與硬體診斷測試
-
-### 註冊 Systemd 開機自動啟動服務
 ```bash
-# 於 Raspberry Pi 5 安裝核心服務與藍牙自動配對服務
-sudo bash scripts/install_service.sh
-sudo systemctl enable --now visor-core
-
-# 於 Raspberry Pi Zero 2W 安裝 HUD 顯示服務
-sudo cp scripts/visor-hud.service /etc/systemd/system/
-sudo systemctl daemon-reload
-sudo systemctl enable --now visor-hud
-```
-
-### 執行自動化測試套件 (Pytest)
-專案內建涵蓋通訊協定、HUD 心跳同步、哨兵錄影、黑盒子記錄器與硬體容錯之完整測試套件：
-```bash
+# 執行完整 Pytest 單元與端對端整合測試
 pytest tests/ -v
-```
 
-### 硬體診斷工具集
-* **雙 USB 鏡頭頻寬與節點檢測**：`python scripts/diag_dual_usb.py`
-* **雙 MIPI-CSI 鏡頭檢測**：`python scripts/diag_dual_csi.py`
-* **OLED 顯示器與光學翻轉硬體測試**：`python scripts/test_oled_hardware.py`
-* **HUD 動態威脅與閃爍模擬測試**：`python scripts/test_hud_demo.py`
+# 雙 USB / 雙 CSI 鏡頭與 OLED 硬體診斷
+python scripts/diag_dual_usb.py
+python scripts/diag_dual_csi.py
+python scripts/test_oled_hardware.py
+```
 
 ---
 
-## 📄 授權與開發團隊 (License & Credits)
+## 👥 研究團隊與指導教授 (Project Team & Credits)
 
-* **專案名稱**：V.I.S.O.R. (Visor Intelligent Smart Operations & Reporting)
-* **開發團隊**：Joe10897 / V.I.S.O.R. Team
+* **專案名稱 (Project)**：**V.I.S.O.R. — Visual Intelligent Safety on Road (智慧視覺機車安全行車輔助系統)**
+* **所屬院校 (Institution)**：致理科技大學 資訊管理系 (Department of Information Management, Chihlee University of Technology)
+* **指導教授 (Supervisor)**：楊宣哲 助理教授 (Prof. Hsuan-Che Yang)
+* **研發團隊成員 (Team Members)**：林韋丞、陳于庭、楊詠媜、林佳嫻、黃澤然 (Simon C.-Y. Wong, Chia-Hsien Lin, et al.)
 * **GitHub Repository**：[https://github.com/joe10897/Visor](https://github.com/joe10897/Visor)
