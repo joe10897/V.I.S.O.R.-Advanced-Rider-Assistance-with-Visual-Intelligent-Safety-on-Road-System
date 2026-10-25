@@ -136,58 +136,62 @@
 ```mermaid
 flowchart TB
     subgraph Sensors["📷 星光級雙鏡頭感測層 (Dual STARVIS 2 Cameras)"]
-        CamFront["前向廣角鏡頭 (Front ADAS Cam)<br/>Sony IMX662 STARVIS 2<br/>FOV 120° | f = 260 px"]
-        CamRear["後向超廣角鏡頭 (Rear BSD Cam)<br/>Sony IMX662 STARVIS 2<br/>FOV 173° | f = 185 px"]
+        CamFront["前向廣角鏡頭 (Front ADAS Cam)｜Sony IMX662 STARVIS 2｜FOV 120° (f = 260 px)"]
+        CamRear["後向超廣角鏡頭 (Rear BSD Cam)｜Sony IMX662 STARVIS 2｜FOV 173° (f = 185 px)"]
     end
 
     subgraph Pi5["🧠 V.I.S.O.R. Core 車載運算中樞 (Raspberry Pi 5 — 8GB RAM)"]
-        FrameReader["FrameReader 雙路非同步擷取<br/>V4L2 VIDIOC_QUERYCAP 節點過濾與防衝突"]
-        Scheduler["Asymmetric Ping-Pong 排程器<br/>20Hz 雙鏡頭交替推論 + 後方危險優先鎖定"]
+        FrameReader["FrameReader 雙路非同步擷取｜V4L2 VIDIOC_QUERYCAP 節點過濾與防衝突"]
+        Scheduler["Asymmetric Ping-Pong 排程器｜20Hz 雙鏡頭交替推論 + 後方危險優先鎖定"]
         
         subgraph AIPipeline["VisorCore 邊緣視覺感知與四階消抖管線"]
-            Preproc["4:3 原生幾何前處理 (384×288)<br/>CLAHE 自適應均衡 + 算力節省 64%"]
-            YOLO["YOLO26n-TW Titan (2.37M)<br/>5 類別台灣混流偵測 + P3 小目標強化"]
-            Lane["輕量車道線感知引擎<br/>CV-Magnet (0.4ms) / LSTR (11.6ms)"]
-            Sentinel["SpatialFusion v2 四階邊緣消抖引擎<br/>①行人分流 ➔ ②雙指數 EMA ➔ ③速率門檻 ➔ ④施密特遲滯"]
+            Preproc["4:3 原生幾何前處理 (384x288)｜CLAHE 自適應均衡 + 算力節省 64%"]
+            YOLO["YOLO26n-TW Titan (2.37M)｜5 類別台灣混流偵測 + P3 小目標強化"]
+            Lane["輕量車道線感知引擎｜CV-Magnet (0.4ms) / LSTR (11.6ms)"]
+            Sentinel["SpatialFusion v2 四階邊緣消抖引擎｜①行人分流 ➔ ②雙指數 EMA ➔ ③速率門檻 ➔ ④施密特遲滯"]
         end
 
-        Recorder["DashcamRecorder 哨兵循環錄影<br/>環形緩衝區 + 傾角/衝擊事件鎖檔"]
-        TripLogger["TripLogger 車載黑盒子<br/>非同步佇列 CSV 路測紀錄 (<0.1% CPU)"]
+        Recorder["DashcamRecorder 哨兵循環錄影｜環形緩衝區 + 傾角與衝擊事件鎖檔"]
+        TripLogger["TripLogger 車載黑盒子｜非同步佇列 CSV 路測紀錄 (CPU 負載低於 0.1%)"]
         
-        CommHub["多協定容錯通訊匯流排 (Dual-Channel Comm Hub)<br/>WebSocket (:8765) | BT RFCOMM (Ch.1) | UDP (:5005/:5006)"]
+        CommHub["多協定容錯通訊匯流排 (Dual-Channel Comm Hub)｜WebSocket (:8765)｜BT RFCOMM (Ch.1)｜UDP (:5005/:5006)"]
     end
 
     subgraph PiZero["🥽 V.I.S.O.R. HUD 抬頭顯示節點 (Raspberry Pi Zero 2W)"]
-        HudClient["HudClient 三執行緒零積壓引擎<br/>多路單播/廣播心跳回報 (pi5.local / 192.168.4.1)"]
-        OLED["1.3\" / 0.96\" I2C OLED (128×64)<br/>SSD1306 / SH1106 光學鏡像與硬體反白閃爍"]
+        HudClient["HudClient 三執行緒零積壓引擎｜多路單播與廣播心跳回報 (pi5.local / 192.168.4.1)"]
+        OLED["1.3 吋 / 0.96 吋 I2C OLED (128x64)｜SSD1306 / SH1106 光學鏡像與硬體反白閃爍"]
     end
 
     subgraph MobileApp["📱 V.I.S.O.R. 戰術行動端 (Android Cordova / React)"]
-        UI["雙鏡頭即時預覽與戰術儀表板<br/>Tactical Log / 遠端 HUD 調光 / 雙機安全關機"]
-        Geo["GPS 全台測速照相預警系統<br/>離線 1,967 點位資料庫 + Haversine 解算"]
-        ESOS["E-SOS 緊急救援通報模組<br/>嚴重傾倒 (>18°) 自動發送求救簡訊"]
+        UI["雙鏡頭即時預覽與戰術儀表板｜Tactical Log / 遠端 HUD 調光 / 雙機安全關機"]
+        Geo["GPS 全台測速照相預警系統｜離線 1,967 點位資料庫 + Haversine 解算"]
+        ESOS["E-SOS 緊急救援通報模組｜嚴重傾倒 (大於 18 度) 自動發送求救簡訊"]
     end
 
     subgraph Cloud["☁️ 雲端分析與持久層 (Cloud Analytics)"]
-        Supabase[("Supabase 雲端資料庫<br/>安全評分 / 急煞 / 超速 / 危險傾角分析")]
+        Supabase[("Supabase 雲端資料庫｜安全評分 / 急煞 / 超速 / 危險傾角分析")]
     end
 
     CamFront --> FrameReader
     CamRear --> FrameReader
     FrameReader --> Scheduler
     FrameReader --> Recorder
-    Scheduler --> Preproc --> YOLO & Lane --> Sentinel
+    Scheduler --> Preproc
+    Preproc --> YOLO
+    Preproc --> Lane
+    YOLO --> Sentinel
+    Lane --> Sentinel
     Sentinel --> TripLogger
     Sentinel --> CommHub
 
-    CommHub -- "UDP Broadcast/Unicast :5005 (<128B, <1.2ms, 20Hz)" --> HudClient
-    HudClient -- "UDP Heartbeat :5006 (自動鎖定單播 IP)" --> CommHub
-    HudClient -- "I2C Bus (0x3C)" --> OLED
+    CommHub -->|"UDP Broadcast/Unicast :5005 (20Hz, 延遲低於 1.2ms)"| HudClient
+    HudClient -->|"UDP Heartbeat :5006 (自動鎖定單播 IP)"| CommHub
+    HudClient -->|"I2C Bus (0x3C)"| OLED
 
-    CommHub <-- "Wi-Fi WebSocket :8765 / Bluetooth RFCOMM Ch.1" --> UI
+    CommHub <-->|"Wi-Fi WebSocket :8765 / Bluetooth RFCOMM Ch.1"| UI
     UI --> Geo
     UI --> ESOS
-    UI <-- "REST / Realtime Sync" --> Supabase
+    UI <-->|"REST / Realtime Sync"| Supabase
 ```
 
 ---
@@ -198,12 +202,12 @@ flowchart TB
 
 ```mermaid
 flowchart LR
-    Input["🎯 YOLO26n 偵測框 + LSTR 車道線<br/>分車種真實車寬單目測距<br/>d = max(0, (W_real × f) / w_bbox - 3)"]
-    Stage1["① 行人分流 (Pedestrian Offload)<br/>路側非本車道行人跳過追蹤運算<br/>釋放 Pi 5 達 35% CPU 算力"]
-    Stage2["② 雙指數平滑 (Dual EMA Filter)<br/>D_t = 0.35 D_raw + 0.65 D_{t-1}<br/>Kalman EMA 平滑距離與差分速度"]
-    Stage3["③ 速率門檻過濾 (Velocity Gate)<br/>v_rel > 0.6 m/s 才判定為實質逼近<br/>均速跟車強制抑制紅燈誤報"]
-    Stage4["④ 鄰道隔離與施密特遲滯 (Hysteresis)<br/>鄰道車輛最高限黃燈 (CAUTION)<br/>降級具備 1.5m 空間緩衝 + 0.25s 冷卻"]
-    Output["🚨 穩定車載級三級預警輸出<br/>CRITICAL (<1.0s / <2m)<br/>WARNING (<1.5s / <4m)<br/>CAUTION (<2.5s / <8m)"]
+    Input["🎯 YOLO26n 偵測框 + LSTR 車道線｜分車種真實車寬單目測距 d = (W_real * f) / w_bbox - 3"]
+    Stage1["① 行人分流 (Pedestrian Offload)｜路側非本車道行人跳過追蹤｜釋放 Pi 5 達 35% CPU 算力"]
+    Stage2["② 雙指數平滑 (Dual EMA Filter)｜D_t = 0.35 D_raw + 0.65 D_prev｜平滑距離與差分速度"]
+    Stage3["③ 速率門檻過濾 (Velocity Gate)｜v_rel 大於 0.6 m/s 才判定逼近｜均速跟車強制抑制紅燈誤報"]
+    Stage4["④ 鄰道隔離與施密特遲滯 (Hysteresis)｜鄰道最高限黃燈 (CAUTION)｜降級具備 1.5m 緩衝 + 0.25s 冷卻"]
+    Output["🚨 車載級三級預警輸出｜CRITICAL (TTC 低於 1.0s)｜WARNING (TTC 低於 1.5s)｜CAUTION (TTC 低於 2.5s)"]
 
     Input --> Stage1 --> Stage2 --> Stage3 --> Stage4 --> Output
 ```
