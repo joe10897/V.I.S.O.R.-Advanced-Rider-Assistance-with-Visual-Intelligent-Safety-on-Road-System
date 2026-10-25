@@ -401,7 +401,7 @@ motorcycle_assist/
 
 ```bash
 # 1. 複製專案儲存庫 (Clone Repository)
-git clone https://github.com/joe10897/Visor.git motorcycle_assist
+git clone https://github.com/joe10897/V.I.S.O.R.-Advanced-Rider-Assistance-with-Visual-Intelligent-Safety-on-Road-System.git motorcycle_assist
 cd motorcycle_assist
 
 # 2. 安裝 Linux 系統層級相依套件 (BlueZ 藍牙、V4L2 相機工具與 OpenCV 依賴)
@@ -477,4 +477,4 @@ python scripts/test_oled_hardware.py
 * **所屬院校 (Institution)**：致理科技大學 資訊管理系 (Department of Information Management, Chihlee University of Technology)
 * **指導教授 (Supervisor)**：楊宣哲 助理教授 (Prof. Hsuan-Che Yang)
 * **研發團隊成員 (Team Members)**：林韋丞、陳于庭、楊詠媜、林佳嫻、黃澤然 (Simon C.-Y. Wong, Chia-Hsien Lin, et al.)
-* **GitHub Repository**：[https://github.com/joe10897/Visor](https://github.com/joe10897/Visor)
+* **GitHub Repository**：[https://github.com/joe10897/V.I.S.O.R.-Advanced-Rider-Assistance-with-Visual-Intelligent-Safety-on-Road-System](https://github.com/joe10897/V.I.S.O.R.-Advanced-Rider-Assistance-with-Visual-Intelligent-Safety-on-Road-System)
